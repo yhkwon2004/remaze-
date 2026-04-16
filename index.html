@@ -8,6 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"/>
 <link rel="stylesheet" href="css/style.css"/>
+<!-- 이미지 preload: 슬라이드 3~5에서 쓰이는 핵심 이미지 미리 로드 -->
+<link rel="preload" as="image" href="images/click-to-green.jpg"/>
+<link rel="preload" as="image" href="images/wonrse-keycap.jpg"/>
 </head>
 <body>
 
@@ -212,7 +215,8 @@
       </div>
       <div class="sol-right" data-anim="slideLeft">
         <div class="sol-image-wrap">
-          <img src="images/click-to-green.jpg" alt="Click to Green 키캡 키링"/>
+          <img src="images/click-to-green.jpg" alt="Click to Green 키캡 키링"
+               loading="lazy" decoding="async" width="700" height="525"/>
           <div class="sol-badge">
             <i class="fas fa-recycle"></i>
             <span>Waste → Value</span>
@@ -233,7 +237,12 @@
       <div class="prod-showcase" data-anim="fadeUp" data-delay="200">
         <div class="prod-main">
           <div class="prod-img-wrap">
-            <img src="images/click-to-green.jpg" alt="전북현대 키캡 키링"/>
+            <!-- 메인 제품 이미지: loading=eager (슬라이드 4 진입 시 즉시 렌더) -->
+            <img src="images/click-to-green.jpg"
+                 alt="폐키보드 업사이클 키캡 키링"
+                 loading="lazy"
+                 decoding="async"
+                 width="600" height="338"/>
           </div>
           <div class="prod-info">
             <span class="prod-badge">FLAGSHIP</span>
@@ -248,7 +257,13 @@
         </div>
         <div class="prod-sub-grid">
           <div class="prod-sub">
-            <img src="images/wonrse-keycap.jpg" alt="원광대학교 키캡 키링"/>
+            <div class="prod-sub-imgwrap">
+              <img src="images/wonrse-keycap.jpg"
+                   alt="원광대학교 키캡 키링"
+                   loading="lazy"
+                   decoding="async"
+                   width="200" height="180"/>
+            </div>
             <div class="ps-info">
               <span class="ps-tag">대학 납품</span>
               <h4>원광대 에디션</h4>
@@ -309,10 +324,12 @@
       <div class="proj-right" data-anim="slideLeft">
         <div class="proj-gallery">
           <div class="pg-main">
-            <img src="images/green-cycle-poster.jpg" alt="Green Cycle Poster"/>
+            <img src="images/green-cycle-poster.jpg" alt="Green Cycle Poster"
+                 loading="lazy" decoding="async" width="600" height="400"/>
           </div>
           <div class="pg-sub">
-            <img src="images/green-cycle-product.jpg" alt="Green Cycle Product"/>
+            <img src="images/green-cycle-product.jpg" alt="Green Cycle Product"
+                 loading="lazy" decoding="async" width="300" height="200"/>
           </div>
         </div>
       </div>
