@@ -198,7 +198,10 @@ function renderGallery(){
     return `
       <div class="gm-item" onclick="openLightbox('${item.src}','${escHtml(item.title)}')">
         ${deleteBtn}
-        <img src="${item.src}" alt="${escHtml(item.title)}" loading="lazy" onerror="this.parentElement.style.display='none'"/>
+        <img src="${item.src}" alt="${escHtml(item.title)}"
+             loading="lazy" decoding="async"
+             onerror="this.parentElement.style.display='none'"
+             onload="this.classList.add('loaded')"/>
         <div class="gm-overlay">
           <h4>${escHtml(item.title)}</h4>
           <p>${catLabel(item.category)}</p>
