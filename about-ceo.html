@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CEO — 권용현 | MAZE</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"/>
+<link rel="stylesheet" href="css/style.css"/>
+<style>
+html,body{overflow:auto!important;height:auto}
+#fullpage{overflow:visible!important;height:auto!important;scroll-snap-type:none!important}
+body{background:#0a0c0f}
+
+/* ── AWARD TIMELINE ── */
+.award-year-block{margin-bottom:48px}
+.award-year-label{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;
+  color:#fff;margin-bottom:20px;
+}
+.award-year-label .yr-num{
+  font-size:0.7rem;font-weight:700;letter-spacing:.12em;
+  color:#6bff85;background:rgba(107,255,133,0.1);
+  border:1px solid rgba(107,255,133,0.2);
+  padding:3px 10px;border-radius:100px;
+}
+
+.award-list{display:flex;flex-direction:column;gap:10px}
+
+.award-row{
+  display:flex;align-items:center;gap:16px;
+  padding:14px 18px;
+  background:rgba(255,255,255,0.025);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:12px;
+  transition:background .2s,border-color .2s,transform .2s;
+}
+.award-row:hover{
+  background:rgba(255,255,255,0.05);
+  border-color:rgba(107,255,133,0.15);
+  transform:translateX(4px);
+}
+.award-row.highlight{
+  background:rgba(107,255,133,0.04);
+  border-color:rgba(107,255,133,0.2);
+}
+.award-row.highlight-gold{
+  background:rgba(251,191,36,0.04);
+  border-color:rgba(251,191,36,0.18);
+}
+
+.award-rank{
+  flex-shrink:0;
+  font-size:0.68rem;font-weight:800;letter-spacing:.06em;
+  padding:4px 10px;border-radius:100px;white-space:nowrap;
+  min-width:62px;text-align:center;
+}
+.rank-grand{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.25)}
+.rank-best{background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid rgba(251,191,36,0.25)}
+.rank-excel{background:rgba(107,255,133,0.12);color:#6bff85;border:1px solid rgba(107,255,133,0.22)}
+.rank-good{background:rgba(99,102,241,0.12);color:#a5b4fc;border:1px solid rgba(99,102,241,0.22)}
+.rank-encour{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.1)}
+.rank-enter{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.35);border:1px solid rgba(255,255,255,0.08)}
+
+.award-name{
+  flex:1;
+  font-size:0.9rem;font-weight:600;color:rgba(255,255,255,0.85);
+}
+.award-name .award-sub{
+  display:block;font-size:0.72rem;font-weight:400;
+  color:rgba(255,255,255,0.35);margin-top:2px;
+}
+.award-date{
+  flex-shrink:0;
+  font-size:0.72rem;color:rgba(255,255,255,0.3);
+  font-weight:500;white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.award-hot{
+  flex-shrink:0;font-size:0.68rem;font-weight:700;
+  color:#f87171;background:rgba(239,68,68,0.12);
+  padding:2px 8px;border-radius:100px;border:1px solid rgba(239,68,68,0.2);
+  white-space:nowrap;
+}
+
+/* ── KEYWORD TAGS ── */
+.kw-row{display:flex;flex-wrap:wrap;gap:7px;margin:16px 0 8px}
+.kw-tag{
+  font-size:0.72rem;font-weight:600;letter-spacing:.04em;
+  padding:4px 12px;border-radius:100px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);
+  color:rgba(255,255,255,0.45);
+}
+.kw-tag.green{background:rgba(107,255,133,0.07);border-color:rgba(107,255,133,0.18);color:rgba(107,255,133,0.8)}
+
+/* ── STATS BAR ── */
+.award-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+  margin-bottom:40px;
+}
+@media(max-width:640px){.award-stats{grid-template-columns:repeat(2,1fr)}}
+.stat-box{
+  padding:16px;background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.07);border-radius:12px;
+  text-align:center;
+}
+.stat-box .sn{font-size:1.6rem;font-weight:800;color:#6bff85;line-height:1}
+.stat-box .sl{font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:5px}
+
+/* ── SECTION CARD ── */
+.ceo-card{
+  background:rgba(255,255,255,0.025);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:16px;padding:28px 28px;
+  margin-bottom:20px;
+}
+.ceo-card h3{
+  font-size:0.72rem;font-weight:700;letter-spacing:.1em;
+  color:rgba(107,255,133,0.7);text-transform:uppercase;margin-bottom:14px;
+}
+
+/* ── VALUE GRID ── */
+.value-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:560px){.value-cards{grid-template-columns:1fr}}
+.value-card{
+  padding:18px;background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.07);border-radius:12px;
+}
+.value-card i{font-size:1.2rem;color:#6bff85;margin-bottom:10px}
+.value-card h4{font-size:0.9rem;font-weight:700;margin-bottom:6px}
+.value-card p{font-size:0.8rem;color:rgba(255,255,255,0.5);line-height:1.7}
+
+/* ── PORTRAIT ── */
+.ceo-portrait-wrap{
+  display:flex;align-items:center;gap:24px;
+  padding:28px;background:rgba(255,255,255,0.025);
+  border:1px solid rgba(255,255,255,0.07);border-radius:16px;margin-bottom:20px;
+}
+.ceo-avatar{
+  width:88px;height:88px;border-radius:50%;
+  background:rgba(45,122,58,0.2);border:2px solid rgba(107,255,133,0.2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.ceo-avatar i{font-size:2.4rem;color:rgba(107,255,133,0.4)}
+.ceo-id h2{font-size:1.4rem;font-weight:800;margin-bottom:4px}
+.ceo-id p{font-size:0.82rem;color:rgba(255,255,255,0.45);line-height:1.8}
+.ceo-id a{color:#6bff85}
+
+@media(max-width:480px){
+  .ceo-portrait-wrap{flex-direction:column;text-align:center}
+  .award-row{flex-wrap:wrap}
+  .award-date{display:none}
+}
+</style>
+</head>
+<body class="subpage-body">
+
+<!-- NAV -->
+<nav class="subpage-nav">
+  <a href="index.html" class="nav-logo">
+    <img src="images/logo.png" alt="MAZE"/>
+    <span>MAZE</span>
+  </a>
+  <div style="display:flex;gap:16px;align-items:center">
+    <a href="index.html" style="font-size:0.82rem;color:rgba(255,255,255,0.5);transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">← Home</a>
+    <a href="login.html" id="ceoLoginBtn" style="font-size:0.82rem;background:#2d7a3a;color:#fff;padding:7px 16px;border-radius:8px;font-weight:600">Login</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="subpage-hero" style="min-height:240px;padding-top:100px">
+  <div class="subpage-hero-content">
+    <p class="label-tag" style="margin-bottom:16px">CEO</p>
+    <h1>권용현</h1>
+    <p style="color:rgba(255,255,255,0.55);font-size:1rem">MAZE 대표 · 04년생 · 업사이클링 이노베이터</p>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="subpage-content">
+
+  <!-- PORTRAIT CARD -->
+  <div class="ceo-portrait-wrap">
+    <div class="ceo-avatar"><i class="fas fa-user"></i></div>
+    <div class="ceo-id">
+      <h2>권용현</h2>
+      <p>
+        MAZE 대표이사 · CEO<br/>
+        2004년생 · 전라북도 전주<br/>
+        <a href="https://www.instagram.com/dydgus_.0802" target="_blank"><i class="fab fa-instagram"></i> @dydgus_.0802</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- PHILOSOPHY -->
+  <div class="ceo-card">
+    <h3>Brand Philosophy</h3>
+    <blockquote style="border-left:3px solid #2d7a3a;padding:14px 20px;background:rgba(45,122,58,0.07);border-radius:0 10px 10px 0;font-style:italic;line-height:2;color:rgba(255,255,255,0.85);font-size:0.95rem">
+      "단순한 아이디어라도 세상에 가치가 있다면 반드시 실현한다."<br/>
+      "버려지는 것에 새로운 가치를 더한다."
+    </blockquote>
+  </div>
+
+  <!-- CORE VALUES -->
+  <div class="ceo-card">
+    <h3>Core Values</h3>
+    <div class="value-cards">
+      <div class="value-card"><i class="fas fa-rocket"></i><h4>실행 우선주의</h4><p>생각보다 행동을 먼저. 작은 아이디어도 직접 만들고 팔아보며 검증합니다.</p></div>
+      <div class="value-card"><i class="fas fa-leaf"></i><h4>환경적 책임감</h4><p>버려지는 것에 새 생명을 불어넣는 것이 사업이 아닌 사명이라 생각합니다.</p></div>
+      <div class="value-card"><i class="fas fa-users"></i><h4>연결과 순환</h4><p>사람, 지역, 환경이 연결되어 선순환하는 생태계를 만들고자 합니다.</p></div>
+      <div class="value-card"><i class="fas fa-expand-arrows-alt"></i><h4>끊임없는 확장</h4><p>현재에 안주하지 않고 기술과 사회 문제 해결로 끊임없이 영역을 확장합니다.</p></div>
+    </div>
+  </div>
+
+  <!-- KEY MILESTONES -->
+  <div class="ceo-card">
+    <h3>Key Milestones</h3>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;gap:16px;padding:14px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px">
+        <span style="font-size:0.72rem;font-weight:700;color:rgba(107,255,133,0.5);min-width:36px;padding-top:2px">2024</span>
+        <div><strong style="font-size:0.9rem">전북현대모터스FC × MAZE — 그린 사이클 프로젝트</strong>
+          <p style="font-size:0.8rem;color:rgba(255,255,255,0.45);margin-top:4px">팝업스토어 1시간 내 전량 완판 · 수익금 전액 <strong style="color:#6bff85">초록우산 어린이재단</strong> 기부 · <a href="https://www.hyundaimotorgroup.com/ko/news/CONT0000000000208340" target="_blank" style="color:#6bff85">현대자동차그룹 공식 보도 ↗</a></p>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;padding:14px 16px;background:rgba(107,255,133,0.04);border:1px solid rgba(107,255,133,0.12);border-radius:12px">
+        <span style="font-size:0.72rem;font-weight:700;color:rgba(107,255,133,0.5);min-width:36px;padding-top:2px">2025</span>
+        <div><strong style="font-size:0.9rem">전북권 Drive Up 창업캠프 대상 (전북도지사 표창)</strong>
+          <p style="font-size:0.8rem;color:rgba(255,255,255,0.45);margin-top:4px">전라북도 대표 창업 경진에서 도지사 표창 수상.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;padding:14px 16px;background:rgba(107,255,133,0.04);border:1px solid rgba(107,255,133,0.12);border-radius:12px">
+        <span style="font-size:0.72rem;font-weight:700;color:rgba(107,255,133,0.5);min-width:36px;padding-top:2px">2025</span>
+        <div><strong style="font-size:0.9rem">전주 청년 창업경진대회 최우수상 (중기부)</strong>
+          <p style="font-size:0.8rem;color:rgba(255,255,255,0.45);margin-top:4px">중소벤처기업부 주관 대회에서 청년 창업 모델 인정.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;padding:14px 16px;background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.15);border-radius:12px">
+        <span style="font-size:0.72rem;font-weight:700;color:#fbbf24;min-width:36px;padding-top:2px">2026</span>
+        <div><strong style="font-size:0.9rem">CMU 글로벌 캡스톤 경진대회 3위 🌏</strong>
+          <p style="font-size:0.8rem;color:rgba(255,255,255,0.45);margin-top:4px">카네기멜론대학교 주관 글로벌 무대에서 기술력 세계 검증.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISION -->
+  <div class="ceo-card">
+    <h3>Vision Statement</h3>
+    <p style="font-size:0.92rem;color:rgba(255,255,255,0.7);line-height:1.9">
+      권용현 대표의 목표는 <strong style="color:rgba(107,255,133,0.9)">MAZE를 단순한 굿즈 회사를 넘어, 지속가능한 순환 경제를 실현하는 기업</strong>으로 성장시키는 것입니다.<br/><br/>
+      업사이클링 굿즈 제작으로 시작한 사업을 기반으로, 다양한 사회 문제 영역에서 아이디어를 실행으로 연결하는 기업을 지향합니다.<br/><br/>
+      나이가 어리다는 것은 오히려 더 오래, 더 많이 도전할 수 있다는 의미라고 믿습니다.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       수상 이력 전체 (CEO 페이지 전용)
+  ══════════════════════════════════════════ -->
+  <div style="margin:40px 0 16px">
+    <p class="label-tag" style="margin-bottom:8px">수상 이력</p>
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:800;margin-bottom:6px">Awards & Achievements</h2>
+    <p style="font-size:0.85rem;color:rgba(255,255,255,0.4)">2023 – 2025 전체 수상 내역 · CEO 개인 이력 통합 기록</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="award-stats">
+    <div class="stat-box"><div class="sn">37<span style="font-size:1rem">+</span></div><div class="sl">총 수상 횟수</div></div>
+    <div class="stat-box"><div class="sn">5</div><div class="sl">대상 / 최우수</div></div>
+    <div class="stat-box"><div class="sn">3</div><div class="sl">도지사·시장 표창</div></div>
+    <div class="stat-box"><div class="sn">🌏</div><div class="sl">CMU 글로벌 3위</div></div>
+  </div>
+
+  <!-- ■ 2023 -->
+  <div class="award-year-block">
+    <div class="award-year-label">
+      <span>2023</span>
+      <span class="yr-num">5개 수상</span>
+    </div>
+    <div class="kw-row">
+      <span class="kw-tag">VR 헬스케어</span>
+      <span class="kw-tag">자율주행</span>
+      <span class="kw-tag">로봇 제작</span>
+      <span class="kw-tag">시스템 통합 설계</span>
+    </div>
+    <div class="award-list">
+      <div class="award-row">
+        <span class="award-rank rank-excel">우수상</span>
+        <div class="award-name">스마트헬스케어 특성화 SW 비교과 경진대회<span class="award-sub">VR 재활게임 개발 · Unity · C#</span></div>
+        <span class="award-date">2023.08.31</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-encour">장려상</span>
+        <div class="award-name">취·창업 아카데미 모의면접 경진대회</div>
+        <span class="award-date">2023.11.14</span>
+      </div>
+      <div class="award-row highlight">
+        <span class="award-rank rank-best">최우수상</span>
+        <div class="award-name">Ticket to the Dream 대학생 해커톤<span class="award-sub">아이디어 → 프로토타입 24시간 구현</span></div>
+        <span class="award-date">2023.12.10</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-excel">우수상</span>
+        <div class="award-name">ROS 기반 자율주행 자동차 경진대회<span class="award-sub">ROS · Python · 센서 퓨전</span></div>
+        <span class="award-date">2023.12.20</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-excel">우수상</span>
+        <div class="award-name">Adventure Design 경진대회<span class="award-sub">문제 정의 → 제품 설계</span></div>
+        <span class="award-date">2023.12.22</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ■ 2024 -->
+  <div class="award-year-block">
+    <div class="award-year-label">
+      <span>2024</span>
+      <span class="yr-num">15개 수상</span>
+    </div>
+    <div class="kw-row">
+      <span class="kw-tag">IoT</span>
+      <span class="kw-tag">임베디드</span>
+      <span class="kw-tag green">창업</span>
+      <span class="kw-tag">에너지</span>
+      <span class="kw-tag">제품 설계</span>
+      <span class="kw-tag">데이터 기반 분석</span>
+    </div>
+    <div class="award-list">
+      <div class="award-row">
+        <span class="award-rank rank-excel">우수상</span>
+        <div class="award-name">호남제주권 제품 제작 캠프</div>
+        <span class="award-date">2024.01.26</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-excel">우수상</span>
+        <div class="award-name">에듀카트 BM 개발 캠프</div>
+        <span class="award-date">2024.05.25</span>
+      </div>
+      <div class="award-row highlight">
+        <span class="award-rank rank-best">최우수상</span>
+        <div class="award-name">PSST 창업 시뮬레이션 캠프</div>
+        <span class="award-date">2024.05.31</span>
+      </div>
+      <div class="award-row highlight">
+        <span class="award-rank rank-grand">대&nbsp;&nbsp;&nbsp;&nbsp;상</span>
+        <div class="award-name">LINC 3.0 창의대첩 (1학기)<span class="award-sub">산학연계 창의 아이디어 경진 · 혁신성 최고 평가</span></div>
+        <span class="award-date">2024.06.25</span>
+        <span class="award-hot">🔥 핵심</span>
+      </div>
+      <div class="award-row highlight">
+        <span class="award-rank rank-best">최우수상</span>
+        <div class="award-name">공학혁신인재 아이디어 캠프</div>
+        <span class="award-date">2024.06.26</span>
+      </div>
+      <div class="award-row highlight">
+        <span class="award-rank rank-best">최우수상</span>
+        <div class="award-name">Triangle+ 진로설계 캠프</div>
+        <span class="award-date">2024.08.20</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-excel">우수상</span>
+        <div class="award-name">자율주행 로봇·모빌리티 아이디어 대회</div>
+        <span class="award-date">2024.08.31</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-excel">우수상</span>
+        <div class="award-name">제품 제작 역량강화 캠프</div>
+        <span class="award-date">2024.09.06</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-excel">우수상</span>
+        <div class="award-name">WON+ 성장 이야기 공모전</div>
+        <span class="award-date">2024.10.31</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-encour">장려상</span>
+        <div class="award-name">생활 속 에너지 창업 아이디어</div>
+        <span class="award-date">2024.11.02</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-excel">우수상</span>
+        <div class="award-name">대학생활설계 포트폴리오<span class="award-sub">우수상 + 장려상 (2관왕)</span></div>
+        <span class="award-date">2024.11.13</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-encour">장려상</span>
+        <div class="award-name">전북권 창업캠프</div>
+        <span class="award-date">2024.11.21</span>
+      </div>
+      <div class="award-row highlight">
+        <span class="award-rank rank-best">최우수상</span>
+        <div class="award-name">G-Startup 아이디어 캠프</div>
+        <span class="award-date">2024.12.06</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-excel">우수상</span>
+        <div class="award-name">전북권 지역문제 해결 대회</div>
+        <span class="award-date">2024.12.19</span>
+      </div>
+      <div class="award-row highlight">
+        <span class="award-rank rank-best">최우수상</span>
+        <div class="award-name">LINC 3.0 창의대첩 (2학기)</div>
+        <span class="award-date">2024.12.24</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ■ 2025 -->
+  <div class="award-year-block">
+    <div class="award-year-label">
+      <span>2025</span>
+      <span class="yr-num">12개 수상</span>
+    </div>
+    <div class="kw-row">
+      <span class="kw-tag green">창업</span>
+      <span class="kw-tag green">ESG</span>
+      <span class="kw-tag green">업사이클링</span>
+      <span class="kw-tag">데이터 기반 문제 해결</span>
+      <span class="kw-tag green">실사업화</span>
+    </div>
+    <div class="award-list">
+      <div class="award-row">
+        <span class="award-rank rank-excel">우수상</span>
+        <div class="award-name">미래수송기기 해커톤</div>
+        <span class="award-date">2025.02.14</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-encour">장려상</span>
+        <div class="award-name">기업분석 경진대회</div>
+        <span class="award-date">2025.05.12</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-enter">입&nbsp;&nbsp;&nbsp;선</span>
+        <div class="award-name">학습공모전</div>
+        <span class="award-date">2025.06.04</span>
+      </div>
+      <div class="award-row highlight">
+        <span class="award-rank rank-best">최우수상</span>
+        <div class="award-name">JST Do-Dream 해커톤</div>
+        <span class="award-date">2025.07.04</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-excel">우수상</span>
+        <div class="award-name">Energy Up! 아이디어 대회</div>
+        <span class="award-date">2025.07.18</span>
+      </div>
+
+      <div style="margin:12px 0 8px;padding:8px 14px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:8px;font-size:0.72rem;font-weight:700;color:#f87171;letter-spacing:.06em">
+        🔥 핵심 대표 수상
+      </div>
+
+      <div class="award-row highlight">
+        <span class="award-rank rank-grand">대&nbsp;&nbsp;&nbsp;&nbsp;상</span>
+        <div class="award-name">전북권 Drive Up 창업캠프<span class="award-sub">전북도지사 표창</span></div>
+        <span class="award-date">2025.08.07</span>
+        <span class="award-hot">🏆 도지사</span>
+      </div>
+      <div class="award-row highlight">
+        <span class="award-rank rank-grand">대&nbsp;&nbsp;&nbsp;&nbsp;상</span>
+        <div class="award-name">지역문제 해결 캠프 (강릉)<span class="award-sub">강릉시장 표창</span></div>
+        <span class="award-date">2025.08.29</span>
+        <span class="award-hot">🏆 시장</span>
+      </div>
+      <div class="award-row highlight">
+        <span class="award-rank rank-best">최우수상</span>
+        <div class="award-name">전주 청년 창업경진대회<span class="award-sub">중소벤처기업부 주관</span></div>
+        <span class="award-date">2025.09.16</span>
+        <span class="award-hot">🏆 중기부</span>
+      </div>
+      <div class="award-row highlight">
+        <span class="award-rank rank-best">최우수상</span>
+        <div class="award-name">생활혁신 아이디어 리그</div>
+        <span class="award-date">2025.10.31</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-encour">장려상</span>
+        <div class="award-name">호남·제주권 창업경진대회</div>
+        <span class="award-date">2025.10.24</span>
+      </div>
+      <div class="award-row">
+        <span class="award-rank rank-encour">장려상</span>
+        <div class="award-name">홀림 공모전</div>
+        <span class="award-date">2025.11.13</span>
+      </div>
+      <div class="award-row highlight">
+        <span class="award-rank rank-grand">대&nbsp;&nbsp;&nbsp;&nbsp;상</span>
+        <div class="award-name">전북권 지역문제 해결 대회</div>
+        <span class="award-date">2025.12.02</span>
+        <span class="award-hot">🔥 핵심</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ■ 2026 -->
+  <div class="award-year-block">
+    <div class="award-year-label">
+      <span>2026</span>
+      <span class="yr-num" style="border-color:rgba(251,191,36,0.3);background:rgba(251,191,36,0.08);color:#fbbf24">글로벌</span>
+    </div>
+    <div class="award-list">
+      <div class="award-row highlight-gold">
+        <span class="award-rank rank-best" style="background:rgba(251,191,36,0.15);color:#fbbf24;border-color:rgba(251,191,36,0.3)">3위 🥉</span>
+        <div class="award-name">CMU 글로벌 캡스톤 경진대회<span class="award-sub">Carnegie Mellon University 주관 · 글로벌 기술력 검증</span></div>
+        <span class="award-date">2026</span>
+        <span class="award-hot" style="color:#fbbf24;background:rgba(251,191,36,0.1);border-color:rgba(251,191,36,0.2)">🌏 글로벌</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM BTNS -->
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin:16px 0 40px">
+    <a href="index.html" class="btn-primary">← MAZE 홈으로</a>
+    <a href="https://www.instagram.com/dydgus_.0802" target="_blank" class="btn-ghost"><i class="fab fa-instagram"></i> Instagram</a>
+  </div>
+
+</div><!-- /subpage-content -->
+
+<footer style="border-top:1px solid rgba(255,255,255,0.06);padding:24px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+  <span style="font-size:0.78rem;color:rgba(255,255,255,0.3)">© 2025 MAZE. All rights reserved.</span>
+  <div style="display:flex;gap:20px">
+    <a href="index.html" style="font-size:0.78rem;color:rgba(255,255,255,0.3)">Home</a>
+    <a href="community.html" style="font-size:0.78rem;color:rgba(255,255,255,0.3)">Community</a>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  const lb = document.getElementById('ceoLoginBtn');
+  if(lb){
+    const u = AUTH.get();
+    if(u){ lb.textContent = AUTH.isAdmin() ? '관리자' : '마이페이지'; lb.href = 'community.html'; }
+    else { lb.textContent = 'Login'; lb.href = 'login.html'; }
+  }
+</script>
+</body>
+</html>

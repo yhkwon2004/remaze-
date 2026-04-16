@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Community | MAZE</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"/>
+<link rel="stylesheet" href="css/style.css"/>
+<style>
+  html,body{overflow:auto!important;height:auto;min-height:100vh}
+  body{background:#0a0c0f}
+  .tab-btn{padding:10px 20px;font-size:0.85rem;font-weight:600;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);background:none;transition:.2s}
+  .tab-btn.active{background:#2d7a3a;color:#fff;border-color:#2d7a3a}
+  .post-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:20px 24px;margin-bottom:12px;transition:.2s;cursor:pointer}
+  .post-card:hover{background:rgba(255,255,255,0.05);border-color:rgba(107,255,133,0.15);transform:translateY(-1px)}
+  .post-card h4{font-size:0.95rem;font-weight:700;margin-bottom:6px;color:#fff}
+  .post-card .pc-meta{font-size:0.75rem;color:rgba(255,255,255,0.35);display:flex;gap:16px}
+  .post-card .pc-preview{font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:8px;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .post-modal{position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:24px}
+  .post-modal-box{background:#111318;border:1px solid rgba(255,255,255,0.1);border-radius:20px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;padding:36px}
+  .comment-item{padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;gap:12px}
+  .comment-avatar{width:32px;height:32px;border-radius:50%;background:rgba(45,122,58,0.3);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#6bff85;flex-shrink:0}
+  .write-btn{display:inline-flex;align-items:center;gap:8px;background:#2d7a3a;color:#fff;padding:10px 20px;border-radius:10px;font-weight:600;font-size:0.85rem;cursor:pointer;border:none;transition:.2s}
+  .write-btn:hover{background:#246130}
+  .form-textarea{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;padding:14px;font-size:0.9rem;resize:vertical;min-height:120px;outline:none;font-family:inherit;transition:border-color .2s}
+  .form-textarea:focus{border-color:rgba(107,255,133,0.4)}
+  .form-input-dark{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;padding:12px 14px;font-size:0.9rem;outline:none;font-family:inherit;transition:border-color .2s}
+  .form-input-dark:focus{border-color:rgba(107,255,133,0.4)}
+  .badge-admin{font-size:0.65rem;background:rgba(251,191,36,0.15);color:#fbbf24;padding:2px 8px;border-radius:100px;font-weight:700;vertical-align:middle;margin-left:6px}
+</style>
+</head>
+<body class="subpage-body">
+
+<nav class="subpage-nav">
+  <a href="index.html" class="nav-logo">
+    <img src="images/logo.png" alt="MAZE"/><span>MAZE</span>
+  </a>
+  <div style="display:flex;gap:12px;align-items:center">
+    <span id="userGreet" style="font-size:0.82rem;color:rgba(255,255,255,0.5)"></span>
+    <a href="gallery.html" id="galleryNavLink" style="display:none;font-size:0.82rem;color:rgba(255,255,255,0.5)" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">갤러리</a>
+    <button onclick="doLogout()" style="font-size:0.82rem;color:rgba(255,255,255,0.5);background:none;border:1px solid rgba(255,255,255,0.1);padding:6px 14px;border-radius:8px;cursor:pointer;transition:.2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">로그아웃</button>
+  </div>
+</nav>
+
+<div class="subpage-hero" style="min-height:220px;padding-top:90px">
+  <div class="subpage-hero-content">
+    <p class="label-tag" style="margin-bottom:12px">Community</p>
+    <h1 style="font-size:clamp(1.8rem,4vw,3rem)">커뮤니티</h1>
+    <p style="color:rgba(255,255,255,0.55);font-size:0.9rem">MAZE와 함께하는 소통 공간</p>
+  </div>
+</div>
+
+<div class="subpage-content">
+
+  <!-- TABS -->
+  <div style="display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap">
+    <button class="tab-btn active" onclick="switchTab('board')">게시판</button>
+    <button class="tab-btn" onclick="switchTab('notice')">공지사항</button>
+    <!-- 갤러리는 관리자 전용 - 일반 유저에게는 버튼 미노출 -->
+  </div>
+
+  <!-- BOARD TAB -->
+  <div id="tabBoard">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+      <h2 style="font-size:1.2rem;font-weight:700">게시판 <span id="postCount" style="font-size:0.85rem;font-weight:500;color:rgba(255,255,255,0.4)"></span></h2>
+      <button id="writeBtn" class="write-btn" onclick="openWriteModal()"><i class="fas fa-pen"></i> 글쓰기</button>
+    </div>
+
+    <!-- SEARCH -->
+    <div style="display:flex;gap:10px;margin-bottom:20px">
+      <input type="text" id="searchInput" class="form-input-dark" placeholder="검색어 입력..." style="max-width:300px" oninput="renderPosts()"/>
+    </div>
+
+    <div id="postList"></div>
+    <div id="postPagination" style="display:flex;justify-content:center;gap:8px;margin-top:24px"></div>
+  </div>
+
+  <!-- NOTICE TAB -->
+  <div id="tabNotice" style="display:none">
+    <div style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center">
+      <h2 style="font-size:1.2rem;font-weight:700">공지사항</h2>
+      <span id="noticeWriteBtn" style="display:none">
+        <button class="write-btn" onclick="openNoticeModal()"><i class="fas fa-pen"></i> 공지 작성</button>
+      </span>
+    </div>
+    <div id="noticeList"></div>
+  </div>
+
+</div>
+
+<!-- WRITE POST MODAL -->
+<div id="writeModal" style="display:none" class="post-modal" onclick="closeModalOutside(event,'writeModal')">
+  <div class="post-modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <h3 style="font-size:1.1rem;font-weight:700">새 게시글 작성</h3>
+      <button onclick="closeModal('writeModal')" style="color:rgba(255,255,255,0.5);font-size:1.2rem;cursor:pointer;background:none;border:none">×</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <input type="text" id="postTitle" class="form-input-dark" placeholder="제목을 입력하세요"/>
+      <textarea id="postContent" class="form-textarea" placeholder="내용을 입력하세요..."></textarea>
+      <div id="writeErr" style="font-size:0.82rem;color:#ff6b6b"></div>
+      <button onclick="submitPost()" class="btn-primary" style="justify-content:center"><i class="fas fa-paper-plane"></i> 게시하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW POST MODAL -->
+<div id="viewModal" style="display:none" class="post-modal" onclick="closeModalOutside(event,'viewModal')">
+  <div class="post-modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span id="viewCategory" style="font-size:0.72rem;color:#6bff85;font-weight:600;letter-spacing:0.1em"></span>
+      <button onclick="closeModal('viewModal')" style="color:rgba(255,255,255,0.5);font-size:1.2rem;cursor:pointer;background:none;border:none">×</button>
+    </div>
+    <h2 id="viewTitle" style="font-size:1.3rem;font-weight:700;margin-bottom:10px"></h2>
+    <div id="viewMeta" style="font-size:0.75rem;color:rgba(255,255,255,0.35);margin-bottom:20px;display:flex;gap:16px"></div>
+    <div id="viewContent" style="font-size:0.92rem;color:rgba(255,255,255,0.8);line-height:1.85;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:24px;margin-bottom:24px;white-space:pre-wrap"></div>
+
+    <!-- DELETE (admin or author) -->
+    <div id="viewActions" style="margin-bottom:20px;display:none">
+      <button onclick="deleteCurrentPost()" style="font-size:0.8rem;color:#ff6b6b;background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.2);padding:6px 16px;border-radius:8px;cursor:pointer">삭제</button>
+    </div>
+
+    <!-- COMMENTS -->
+    <h4 style="font-size:0.9rem;font-weight:700;margin-bottom:16px;color:rgba(255,255,255,0.5)">댓글 <span id="commentCount">0</span></h4>
+    <div id="commentList"></div>
+    <div style="display:flex;gap:10px;margin-top:16px" id="commentInputArea">
+      <input type="text" id="commentInput" class="form-input-dark" placeholder="댓글을 입력하세요..." style="flex:1" onkeydown="if(event.key==='Enter')submitComment()"/>
+      <button onclick="submitComment()" class="write-btn" style="padding:10px 16px;white-space:nowrap"><i class="fas fa-paper-plane"></i></button>
+    </div>
+    <div id="commentLoginNote" style="display:none;font-size:0.8rem;color:rgba(255,255,255,0.35);margin-top:12px;text-align:center">
+      댓글 작성은 <a href="login.html" style="color:#6bff85">로그인</a> 후 이용 가능합니다.
+    </div>
+  </div>
+</div>
+
+<!-- NOTICE WRITE MODAL -->
+<div id="noticeModal" style="display:none" class="post-modal" onclick="closeModalOutside(event,'noticeModal')">
+  <div class="post-modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <h3 style="font-size:1.1rem;font-weight:700">공지 작성</h3>
+      <button onclick="closeModal('noticeModal')" style="color:rgba(255,255,255,0.5);font-size:1.2rem;cursor:pointer;background:none;border:none">×</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <input type="text" id="noticeTitle" class="form-input-dark" placeholder="공지 제목"/>
+      <textarea id="noticeContent" class="form-textarea" placeholder="공지 내용..."></textarea>
+      <button onclick="submitNotice()" class="btn-primary" style="justify-content:center">공지 게시</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+/* ── STATE ── */
+let currentPostId = null;
+let currentPage = 1;
+const PAGE_SIZE = 10;
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded', ()=>{
+  const user = AUTH.get();
+  if(!user){ window.location.href='login.html'; return; }
+  document.getElementById('userGreet').textContent = `${user.nick}님`;
+  if(AUTH.isAdmin()){
+    document.getElementById('noticeWriteBtn').style.display='inline';
+    // 관리자에게만 갤러리 링크 표시
+    const galLink = document.getElementById('galleryNavLink');
+    if(galLink) galLink.style.display='inline';
+  }
+  renderPosts();
+  renderNotices();
+});
+
+function doLogout(){
+  AUTH.clear();
+  window.location.href='index.html';
+}
+
+function switchTab(tab){
+  document.getElementById('tabBoard').style.display = tab==='board'?'block':'none';
+  document.getElementById('tabNotice').style.display = tab==='notice'?'block':'none';
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    b.classList.toggle('active',(i===0&&tab==='board')||(i===1&&tab==='notice'));
+  });
+}
+
+/* ── POSTS ── */
+function getPosts(){ return JSON.parse(localStorage.getItem('maze_posts')||'[]'); }
+function savePosts(p){ localStorage.setItem('maze_posts',JSON.stringify(p)); }
+
+function renderPosts(){
+  const query = document.getElementById('searchInput')?.value.toLowerCase()||'';
+  let posts = getPosts().filter(p=>!p.isNotice);
+  if(query) posts = posts.filter(p=>p.title.toLowerCase().includes(query)||p.content.toLowerCase().includes(query));
+  posts.sort((a,b)=>b.createdAt-a.createdAt);
+
+  document.getElementById('postCount').textContent = `(${posts.length})`;
+
+  const totalPages = Math.max(1, Math.ceil(posts.length/PAGE_SIZE));
+  if(currentPage>totalPages) currentPage=1;
+  const slice = posts.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
+
+  const list = document.getElementById('postList');
+  if(!posts.length){
+    list.innerHTML=`<div style="text-align:center;padding:60px;color:rgba(255,255,255,0.3)"><i class="fas fa-comment-slash" style="font-size:2rem;margin-bottom:12px;display:block"></i><p>첫 게시글을 작성해보세요!</p></div>`;
+    document.getElementById('postPagination').innerHTML='';
+    return;
+  }
+
+  list.innerHTML = slice.map(p=>`
+    <div class="post-card" onclick="openPost('${p.id}')">
+      <h4>${escHtml(p.title)}</h4>
+      <p class="pc-preview">${escHtml(p.content)}</p>
+      <div class="pc-meta">
+        <span><i class="fas fa-user" style="margin-right:4px"></i>${escHtml(p.author)}${AUTH.isAdmin()&&p.authorId===AUTH.get()?.id?'<span class="badge-admin">ADMIN</span>':''}</span>
+        <span><i class="fas fa-clock" style="margin-right:4px"></i>${timeAgo(p.createdAt)}</span>
+        <span><i class="fas fa-comment" style="margin-right:4px"></i>${(p.comments||[]).length}</span>
+      </div>
+    </div>
+  `).join('');
+
+  // pagination
+  const pag = document.getElementById('postPagination');
+  if(totalPages<=1){ pag.innerHTML=''; return; }
+  let html='';
+  for(let i=1;i<=totalPages;i++){
+    html+=`<button onclick="currentPage=${i};renderPosts()" style="width:36px;height:36px;border-radius:8px;border:1px solid ${i===currentPage?'#2d7a3a':'rgba(255,255,255,0.1)'};background:${i===currentPage?'#2d7a3a':'none'};color:${i===currentPage?'#fff':'rgba(255,255,255,0.5)'};cursor:pointer;font-size:0.85rem;transition:.2s">${i}</button>`;
+  }
+  pag.innerHTML=html;
+}
+
+function openPost(id){
+  const posts=getPosts();
+  const post=posts.find(p=>p.id===id);
+  if(!post) return;
+  currentPostId=id;
+  const user=AUTH.get();
+
+  document.getElementById('viewCategory').textContent='게시글';
+  document.getElementById('viewTitle').textContent=post.title;
+  document.getElementById('viewContent').textContent=post.content;
+  document.getElementById('viewMeta').innerHTML=`
+    <span><i class="fas fa-user" style="margin-right:4px"></i>${escHtml(post.author)}${AUTH.isAdmin()&&post.authorId===AUTH.get()?.id?'<span class="badge-admin">ADMIN</span>':''}</span>
+    <span><i class="fas fa-clock" style="margin-right:4px"></i>${timeAgo(post.createdAt)}</span>
+  `;
+
+  const canDelete = user&&(AUTH.isAdmin()||user.id===post.authorId);
+  document.getElementById('viewActions').style.display = canDelete?'block':'none';
+
+  renderComments(post);
+
+  const commentArea=document.getElementById('commentInputArea');
+  const loginNote=document.getElementById('commentLoginNote');
+  if(user){ commentArea.style.display='flex'; loginNote.style.display='none'; }
+  else { commentArea.style.display='none'; loginNote.style.display='block'; }
+
+  document.getElementById('viewModal').style.display='flex';
+}
+
+function renderComments(post){
+  const comments=post.comments||[];
+  document.getElementById('commentCount').textContent=comments.length;
+  const list=document.getElementById('commentList');
+  if(!comments.length){ list.innerHTML=`<p style="font-size:0.82rem;color:rgba(255,255,255,0.3);text-align:center;padding:16px">첫 댓글을 남겨보세요!</p>`; return; }
+  list.innerHTML=comments.map(c=>`
+    <div class="comment-item">
+      <div class="comment-avatar">${(c.author||'?')[0].toUpperCase()}</div>
+      <div style="flex:1">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px">
+          <strong style="font-size:0.85rem">${escHtml(c.author)}${AUTH.isAdmin()&&c.authorId===AUTH.get()?.id?'<span class="badge-admin">ADMIN</span>':''}</strong>
+          <span style="font-size:0.72rem;color:rgba(255,255,255,0.3)">${timeAgo(c.createdAt)}</span>
+        </div>
+        <p style="font-size:0.85rem;color:rgba(255,255,255,0.7);line-height:1.6">${escHtml(c.content)}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function submitComment(){
+  const user=AUTH.get();
+  if(!user) return;
+  const val=document.getElementById('commentInput').value.trim();
+  if(!val) return;
+  const posts=getPosts();
+  const post=posts.find(p=>p.id===currentPostId);
+  if(!post) return;
+  if(!post.comments) post.comments=[];
+  post.comments.push({id:uid(),author:user.nick,authorId:user.id,content:val,createdAt:Date.now()});
+  savePosts(posts);
+  document.getElementById('commentInput').value='';
+  renderComments(post);
+}
+
+function deleteCurrentPost(){
+  if(!confirm('게시글을 삭제할까요?')) return;
+  const posts=getPosts().filter(p=>p.id!==currentPostId);
+  savePosts(posts);
+  closeModal('viewModal');
+  renderPosts();
+}
+
+function openWriteModal(){
+  if(!AUTH.isLoggedIn()){ window.location.href='login.html'; return; }
+  document.getElementById('postTitle').value='';
+  document.getElementById('postContent').value='';
+  document.getElementById('writeErr').textContent='';
+  document.getElementById('writeModal').style.display='flex';
+}
+
+async function submitPost(){
+  const user=AUTH.get();
+  const title=document.getElementById('postTitle').value.trim();
+  const content=document.getElementById('postContent').value.trim();
+  const err=document.getElementById('writeErr');
+  if(!title||!content){ err.textContent='제목과 내용을 모두 입력해주세요.'; return; }
+
+  const post={id:uid(),title,content,author:user.nick,authorId:user.id,createdAt:Date.now(),comments:[],isNotice:false};
+
+  // Try API
+  try{
+    const res=await fetch('tables/maze_posts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(post)});
+    if(!res.ok) throw new Error();
+  }catch{
+    const posts=getPosts(); posts.push(post); savePosts(posts);
+  }
+
+  closeModal('writeModal');
+  renderPosts();
+}
+
+/* ── NOTICES ── */
+function getNotices(){ return JSON.parse(localStorage.getItem('maze_notices')||'[]'); }
+function saveNotices(n){ localStorage.setItem('maze_notices',JSON.stringify(n)); }
+
+function renderNotices(){
+  const notices=getNotices().sort((a,b)=>b.createdAt-a.createdAt);
+  const list=document.getElementById('noticeList');
+  if(!notices.length){
+    list.innerHTML=`<div style="text-align:center;padding:60px;color:rgba(255,255,255,0.3)"><i class="fas fa-bullhorn" style="font-size:2rem;margin-bottom:12px;display:block"></i><p>아직 공지사항이 없습니다</p></div>`;
+    return;
+  }
+  list.innerHTML=notices.map(n=>`
+    <div class="post-card" onclick="openNoticeView('${n.id}')">
+      <div style="display:inline-flex;align-items:center;gap:6px;font-size:0.68rem;background:rgba(251,191,36,0.1);color:#fbbf24;padding:2px 10px;border-radius:100px;font-weight:700;margin-bottom:8px">
+        <i class="fas fa-bullhorn"></i> 공지
+      </div>
+      <h4>${escHtml(n.title)}</h4>
+      <p class="pc-preview">${escHtml(n.content)}</p>
+      <div class="pc-meta">
+        <span><i class="fas fa-user" style="margin-right:4px"></i>관리자</span>
+        <span><i class="fas fa-clock" style="margin-right:4px"></i>${timeAgo(n.createdAt)}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openNoticeView(id){
+  const notice=getNotices().find(n=>n.id===id);
+  if(!notice) return;
+  currentPostId=id;
+  document.getElementById('viewCategory').textContent='📢 공지사항';
+  document.getElementById('viewTitle').textContent=notice.title;
+  document.getElementById('viewContent').textContent=notice.content;
+  document.getElementById('viewMeta').innerHTML=`<span>관리자</span><span>${timeAgo(notice.createdAt)}</span>`;
+  document.getElementById('viewActions').style.display=AUTH.isAdmin()?'block':'none';
+  document.getElementById('commentList').innerHTML='';
+  document.getElementById('commentCount').textContent='0';
+  document.getElementById('commentInputArea').style.display='none';
+  document.getElementById('commentLoginNote').style.display='none';
+  document.getElementById('viewModal').style.display='flex';
+}
+
+function openNoticeModal(){
+  document.getElementById('noticeTitle').value='';
+  document.getElementById('noticeContent').value='';
+  document.getElementById('noticeModal').style.display='flex';
+}
+
+function submitNotice(){
+  const title=document.getElementById('noticeTitle').value.trim();
+  const content=document.getElementById('noticeContent').value.trim();
+  if(!title||!content) return;
+  const notices=getNotices();
+  notices.push({id:uid(),title,content,createdAt:Date.now()});
+  saveNotices(notices);
+  closeModal('noticeModal');
+  renderNotices();
+}
+
+/* ── HELPERS ── */
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2) }
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+function timeAgo(ts){
+  const d=(Date.now()-ts)/1000;
+  if(d<60) return '방금 전';
+  if(d<3600) return `${Math.floor(d/60)}분 전`;
+  if(d<86400) return `${Math.floor(d/3600)}시간 전`;
+  return `${Math.floor(d/86400)}일 전`;
+}
+function closeModal(id){ document.getElementById(id).style.display='none'; }
+function closeModalOutside(e,id){ if(e.target.id===id) closeModal(id); }
+</script>
+</body>
+</html>

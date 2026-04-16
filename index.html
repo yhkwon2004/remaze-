@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MAZE — 버려지는 것에서, 새로운 가치를 만들다</title>
+<meta name="description" content="폐키보드 업사이클링으로 새로운 가치를 만드는 기업 MAZE"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"/>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="images/logo.png" alt="MAZE"/>
+    <span>MAZE</span>
+  </a>
+  <div class="nav-right">
+    <!-- 숨김 슬라이드 도트 (인디케이터만 사용) -->
+    <nav class="nav-hidden-slides" aria-label="슬라이드 바로가기">
+      <a href="#" data-slide="0" class="nav-dot-link" title="Home"></a>
+      <a href="#" data-slide="1" class="nav-dot-link" title="About"></a>
+      <a href="#" data-slide="2" class="nav-dot-link" title="Problem"></a>
+      <a href="#" data-slide="3" class="nav-dot-link" title="Solution"></a>
+      <a href="#" data-slide="4" class="nav-dot-link" title="Products"></a>
+      <a href="#" data-slide="5" class="nav-dot-link" title="Projects"></a>
+      <a href="#" data-slide="6" class="nav-dot-link" title="Impact"></a>
+    </nav>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="awards.html" class="nav-btn">Awards</a></li>
+      <li><a href="about-ceo.html" class="nav-btn">CEO</a></li>
+      <li><a href="community.html" class="nav-btn">Community</a></li>
+      <li><a href="#" data-slide="7" class="nav-btn nav-btn-contact">Contact</a></li>
+      <li><a href="login.html" class="nav-login" id="navLoginBtn"><i class="fas fa-user"></i> <span id="navLoginText">Login</span></a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="메뉴">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── SLIDE INDICATOR ── -->
+<div class="slide-indicator" id="slideIndicator"></div>
+
+<!-- ── FULLPAGE WRAPPER ── -->
+<div id="fullpage">
+
+  <!-- SLIDE 0: HERO -->
+  <section class="slide" id="slide-0" data-index="0">
+    <div class="slide-bg slide-bg-hero">
+      <div class="hero-grain"></div>
+      <div class="hero-gradient"></div>
+      <canvas id="heroCanvas"></canvas>
+    </div>
+    <div class="slide-content hero-content">
+      <div class="hero-eyebrow" data-anim="fadeUp" data-delay="0">
+        <span class="dot-green"></span>
+        <span>Upcycling Innovation Brand</span>
+      </div>
+      <h1 class="hero-title" data-anim="fadeUp" data-delay="150">
+        버려지는 것에서,<br/>
+        <em>새로운 가치</em>를 만들다
+      </h1>
+      <p class="hero-sub" data-anim="fadeUp" data-delay="300">
+        폐키보드를 수거해 새로운 굿즈로 재탄생시키는<br class="pc-only"/>
+        업사이클링 브랜드
+      </p>
+      <div class="hero-metrics" data-anim="fadeUp" data-delay="450">
+        <div class="metric"><strong class="count-num" data-target="1">0</strong><small>시간 완판</small></div>
+        <div class="metric-div"></div>
+        <div class="metric"><strong class="count-num" data-target="130">0</strong><small>+ 직접 판매</small></div>
+        <div class="metric-div"></div>
+        <div class="metric"><strong class="count-num" data-target="5">0</strong><small>관왕 수상</small></div>
+      </div>
+      <div class="hero-cta" data-anim="fadeUp" data-delay="600">
+        <button class="btn-primary" onclick="goSlide(1)">브랜드 스토리 <i class="fas fa-arrow-right"></i></button>
+        <a href="community.html" class="btn-ghost">커뮤니티 <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+    <div class="scroll-hint" onclick="goSlide(1)">
+      <span>Scroll</span>
+      <div class="scroll-arrow"><i class="fas fa-chevron-down"></i></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 1: ABOUT -->
+  <section class="slide" id="slide-1" data-index="1">
+    <div class="slide-bg about-bg"></div>
+    <div class="slide-content about-layout">
+      <div class="about-left" data-anim="slideRight">
+        <span class="label-tag">About MAZE</span>
+        <h2>업사이클링으로<br/>세상을 바꾸다</h2>
+        <p>메이즈는 지역에서 버려지는 자원을 수거하여<br/>
+        새로운 제품으로 재탄생시키는 업사이클링 기업입니다.<br/><br/>
+        단순한 재활용을 넘어, <strong>아이디어 → 제품 → 판매 → 사회적 가치</strong>로<br/>
+        이어지는 순환 구조를 실현합니다.</p>
+        <div class="about-tags">
+          <span><i class="fas fa-recycle"></i> 업사이클링</span>
+          <span><i class="fas fa-leaf"></i> ESG 경영</span>
+          <span><i class="fas fa-heart"></i> 사회적 가치</span>
+        </div>
+        <div class="about-philosophy">
+          <i class="fas fa-quote-left"></i>
+          <p>"아이디어가 작더라도,<br/>세상에 가치가 있다면 반드시 만들어낸다"</p>
+        </div>
+      </div>
+      <div class="about-right" data-anim="slideLeft">
+        <div class="about-journey">
+          <div class="journey-step active">
+            <div class="js-num">01</div>
+            <div class="js-body">
+              <h4>수거</h4>
+              <p>전북 지역 폐키보드 무상 수거</p>
+            </div>
+          </div>
+          <div class="journey-line"></div>
+          <div class="journey-step">
+            <div class="js-num">02</div>
+            <div class="js-body">
+              <h4>업사이클링</h4>
+              <p>분해·세척·재조립으로 굿즈 제작</p>
+            </div>
+          </div>
+          <div class="journey-line"></div>
+          <div class="journey-step">
+            <div class="js-num">03</div>
+            <div class="js-body">
+              <h4>판매·기부</h4>
+              <p>판매 후 수익 일부 사회 환원</p>
+            </div>
+          </div>
+          <div class="journey-line"></div>
+          <div class="journey-step">
+            <div class="js-num">04</div>
+            <div class="js-body">
+              <h4>나눔·순환</h4>
+              <p>수익의 사회 환원 및 재투자</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: PROBLEM -->
+  <section class="slide" id="slide-2" data-index="2">
+    <div class="slide-bg problem-bg"></div>
+    <div class="slide-content problem-layout">
+      <div class="problem-header" data-anim="fadeUp">
+        <span class="label-tag label-red">Problem</span>
+        <h2>우리가 외면했던<br/>전자폐기물 문제</h2>
+      </div>
+      <div class="problem-cards" data-anim="fadeUp" data-delay="200">
+        <div class="prob-card">
+          <div class="prob-icon"><i class="fas fa-globe-asia"></i></div>
+          <div class="prob-num">
+            <span class="count-num" data-target="16" data-suffix="kg">0</span>
+          </div>
+          <h4>한국 1인당 전자폐기물</h4>
+          <p>세계 평균 7.3kg을 <strong>2배 이상</strong> 초과하는 한국의 전자폐기물 배출량</p>
+        </div>
+        <div class="prob-card">
+          <div class="prob-icon"><i class="fas fa-keyboard"></i></div>
+          <div class="prob-num">
+            <span class="count-num" data-target="95" data-suffix="%">0</span>
+          </div>
+          <h4>키보드 전량 폐기율</h4>
+          <p>일부 키 불량만으로도 <strong>전체 키보드</strong>를 버리는 소비 패턴</p>
+        </div>
+        <div class="prob-card">
+          <div class="prob-icon"><i class="fas fa-layer-group"></i></div>
+          <div class="prob-num">
+            <span>4+</span>
+          </div>
+          <h4>복합 소재 분리불가</h4>
+          <p>기판·몸체·키캡·스위치 등 <strong>4종 이상 혼합 소재</strong>로 분리배출 불가능</p>
+        </div>
+        <div class="prob-card">
+          <div class="prob-icon"><i class="fas fa-fire"></i></div>
+          <div class="prob-num">
+            <span>매립·소각</span>
+          </div>
+          <h4>환경오염 직결</h4>
+          <p>일반 쓰레기로 분류된 전자폐기물의 <strong>중금속·유해물질</strong> 방출</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: SOLUTION -->
+  <section class="slide" id="slide-3" data-index="3">
+    <div class="slide-bg solution-bg"></div>
+    <div class="slide-content solution-layout">
+      <div class="sol-left" data-anim="slideRight">
+        <span class="label-tag">Solution</span>
+        <h2>폐기물을<br/>굿즈로, 가치로</h2>
+        <p>MAZE는 버려진 키보드의 스위치(축)를 직접 수거·분해·세척하여<br/>
+        <strong>키캡 키링</strong>으로 재탄생시킵니다.<br/><br/>
+        누를 때마다 녹색 빛이 들어오는 이 작은 키링 하나에,<br/>
+        환경을 생각하는 마음이 담겨 있습니다.</p>
+        <div class="sol-flow">
+          <div class="sf-step"><i class="fas fa-box-open"></i><span>수거</span></div>
+          <div class="sf-arrow"><i class="fas fa-long-arrow-alt-right"></i></div>
+          <div class="sf-step"><i class="fas fa-tools"></i><span>가공</span></div>
+          <div class="sf-arrow"><i class="fas fa-long-arrow-alt-right"></i></div>
+          <div class="sf-step"><i class="fas fa-star"></i><span>제품화</span></div>
+          <div class="sf-arrow"><i class="fas fa-long-arrow-alt-right"></i></div>
+          <div class="sf-step"><i class="fas fa-heart"></i><span>가치 창출</span></div>
+        </div>
+      </div>
+      <div class="sol-right" data-anim="slideLeft">
+        <div class="sol-image-wrap">
+          <img src="images/click-to-green.jpg" alt="Click to Green 키캡 키링"/>
+          <div class="sol-badge">
+            <i class="fas fa-recycle"></i>
+            <span>Waste → Value</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: PRODUCTS -->
+  <section class="slide" id="slide-4" data-index="4">
+    <div class="slide-bg products-bg"></div>
+    <div class="slide-content products-layout">
+      <div class="prod-header" data-anim="fadeUp">
+        <span class="label-tag">Products</span>
+        <h2>제품 라인업</h2>
+      </div>
+      <div class="prod-showcase" data-anim="fadeUp" data-delay="200">
+        <div class="prod-main">
+          <div class="prod-img-wrap">
+            <img src="images/click-to-green.jpg" alt="전북현대 키캡 키링"/>
+          </div>
+          <div class="prod-info">
+            <span class="prod-badge">FLAGSHIP</span>
+            <h3>폐키보드 업사이클 키캡 키링</h3>
+            <p>전북지역 수거 폐키보드의 스위치를 재활용.<br/>누를 때마다 녹색 LED 발광. 커스터마이징 가능.</p>
+            <div class="prod-specs">
+              <span><i class="fas fa-check"></i> 실제 폐키보드 소재</span>
+              <span><i class="fas fa-check"></i> LED 발광 내장</span>
+              <span><i class="fas fa-check"></i> 브랜드 커스텀</span>
+            </div>
+          </div>
+        </div>
+        <div class="prod-sub-grid">
+          <div class="prod-sub">
+            <img src="images/wonrse-keycap.jpg" alt="원광대학교 키캡 키링"/>
+            <div class="ps-info">
+              <span class="ps-tag">대학 납품</span>
+              <h4>원광대 에디션</h4>
+              <p>엑스포·페스티벌 답례품</p>
+            </div>
+          </div>
+          <div class="prod-sub coming">
+            <div class="coming-icon"><i class="fas fa-plus-circle"></i></div>
+            <div class="ps-info">
+              <span class="ps-tag ps-dev">준비 중</span>
+              <h4>커스텀 굿즈 확장</h4>
+              <p>기업·브랜드 맞춤 제작</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: PROJECTS -->
+  <section class="slide" id="slide-5" data-index="5">
+    <div class="slide-bg projects-bg"></div>
+    <div class="slide-content projects-layout">
+      <div class="proj-left" data-anim="slideRight">
+        <span class="label-tag">Projects</span>
+        <h2>Green Cycle<br/>Project</h2>
+        <p class="proj-collab">전북현대모터스FC × MAZE, 2024</p>
+        <p>전주월드컵경기장 팝업스토어 운영.<br/>
+        폐키보드를 수거해 전북현대 테마 키캡 키링을 제작,<br/>
+        팬과 함께 만든 ESG 프로젝트.</p>
+        <div class="proj-results">
+          <div class="pr-item">
+            <strong>1hr</strong>
+            <span>전량 완판</span>
+          </div>
+          <div class="pr-item">
+            <strong>초록우산</strong>
+            <span>수익금 전액 기부</span>
+          </div>
+          <div class="pr-item">
+            <strong>Fan+Eco</strong>
+            <span>팬 참여형 ESG</span>
+          </div>
+        </div>
+        <div class="proj-news-link">
+          <a href="https://www.hyundaimotorgroup.com/ko/news/CONT0000000000208340" target="_blank" rel="noopener noreferrer" class="news-btn">
+            <div class="news-btn-icon"><i class="fas fa-newspaper"></i></div>
+            <div class="news-btn-text">
+              <span class="news-btn-label">현대자동차그룹 공식 뉴스</span>
+              <span class="news-btn-title">그린 사이클 프로젝트 보도 자료 →</span>
+            </div>
+          </a>
+        </div>
+        <blockquote class="proj-quote">
+          "단순 판매를 넘어, 환경·스포츠·지역을 하나로 연결한 순환의 이야기"
+        </blockquote>
+      </div>
+      <div class="proj-right" data-anim="slideLeft">
+        <div class="proj-gallery">
+          <div class="pg-main">
+            <img src="images/green-cycle-poster.jpg" alt="Green Cycle Poster"/>
+          </div>
+          <div class="pg-sub">
+            <img src="images/green-cycle-product.jpg" alt="Green Cycle Product"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: IMPACT -->
+  <section class="slide" id="slide-6" data-index="6">
+    <div class="slide-bg impact-bg"></div>
+    <div class="slide-content impact-layout">
+      <div class="impact-header" data-anim="fadeUp">
+        <span class="label-tag label-gold">Impact</span>
+        <h2>숫자로 증명된<br/>실행력</h2>
+      </div>
+      <div class="impact-grid" data-anim="fadeUp" data-delay="200">
+        <div class="impact-card large">
+          <div class="ic-number"><span class="count-num" data-target="1">0</span><sub>hr</sub></div>
+          <h4>팝업스토어 완판</h4>
+          <p>전주월드컵경기장 오픈 1시간 이내 전량 완판. 강력한 시장 검증.</p>
+        </div>
+        <div class="impact-card">
+          <div class="ic-number"><span class="count-num" data-target="130">0</span><sub>+</sub></div>
+          <h4>플리마켓 직판</h4>
+          <p>130개 이상 직접 판매로 소비자 반응 검증 완료.</p>
+        </div>
+        <div class="impact-card">
+          <div class="ic-number"><i class="fas fa-child" style="font-size:1.6rem;color:#6bff85"></i></div>
+          <h4>초록우산 기부</h4>
+          <p>1차 판매 수익금 전액을 초록우산 어린이재단에 기부. 판매 → 나눔 순환 완성.</p>
+        </div>
+        <div class="impact-card">
+          <div class="ic-number"><span class="count-num" data-target="5">0</span><sub>관왕</sub></div>
+          <h4>창업 경진대회 수상</h4>
+          <p>전북도지사상·AI대상 등 5개 경진대회 수상. 실질적으로 검증된 실행력.</p>
+        </div>
+        <div class="impact-card wide">
+          <div class="ic-number"><i class="fas fa-seedling" style="font-size:1.8rem;color:#6bff85"></i></div>
+          <h4>초록우산 기부 완료</h4>
+          <p>전북현대 그린 사이클 1차 판매 수익금 전액을 초록우산 어린이재단에 기부. 판매에서 나눔까지 이어지는 순환 완성.</p>
+        </div>
+      </div>
+      <div class="impact-more" data-anim="fadeUp" data-delay="400">
+        <a href="awards.html" class="btn-outline-green">전체 수상 내역 보기 <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: CONTACT -->
+  <section class="slide" id="slide-7" data-index="7">
+    <div class="slide-bg contact-bg"></div>
+    <div class="slide-content contact-layout">
+      <div class="contact-left" data-anim="slideRight">
+        <span class="label-tag">Contact</span>
+        <h2>함께<br/>만들어요</h2>
+        <p>협업·제작·납품·투자 문의<br/>모두 환영합니다</p>
+        <div class="contact-links">
+          <a href="https://www.instagram.com/dydgus_.0802" target="_blank" class="cl-item">
+            <i class="fab fa-instagram"></i>
+            <span>@dydgus_.0802</span>
+          </a>
+          <div class="cl-item">
+            <i class="fas fa-box"></i>
+            <span>기업·기관·대학 납품</span>
+          </div>
+          <div class="cl-item">
+            <i class="fas fa-handshake"></i>
+            <span>브랜드 콜라보·ESG 프로젝트</span>
+          </div>
+        </div>
+      </div>
+      <div class="contact-right" data-anim="slideLeft">
+        <form class="contact-form" id="contactForm">
+          <div class="cf-group">
+            <input type="text" id="cfName" placeholder=" " required/>
+            <label for="cfName">이름 *</label>
+          </div>
+          <div class="cf-group">
+            <input type="tel" id="cfPhone" placeholder=" " required/>
+            <label for="cfPhone">연락처 *</label>
+          </div>
+          <div class="cf-group">
+            <select id="cfType">
+              <option value="">문의 유형 선택</option>
+              <option>협업 제안</option>
+              <option>납품/제작 문의</option>
+              <option>커스텀 주문</option>
+              <option>투자/파트너십</option>
+              <option>기타</option>
+            </select>
+          </div>
+          <div class="cf-group">
+            <textarea id="cfMsg" rows="4" placeholder=" " required></textarea>
+            <label for="cfMsg">문의 내용 *</label>
+          </div>
+          <button type="submit" class="btn-primary w-full">
+            <i class="fas fa-paper-plane"></i> 문의 보내기
+          </button>
+          <div id="cfResult"></div>
+        </form>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span>© 2025 MAZE. All rights reserved.</span>
+      <div class="footer-nav">
+        <a href="awards.html">Awards</a>
+        <a href="about-ceo.html">CEO</a>
+        <a href="community.html">Community</a>
+      </div>
+    </footer>
+  </section>
+
+</div><!-- /fullpage -->
+
+<!-- ── MOBILE MENU OVERLAY ── -->
+<div class="mobile-menu-overlay" id="mobileOverlay">
+  <button class="overlay-close" id="overlayClose"><i class="fas fa-times"></i></button>
+  <ul>
+    <!-- 간단 슬라이드 이동 (Mobile 전용, 작은 폰트) -->
+    <li class="mob-slide-group">
+      <a href="#" data-slide="0" class="mob-slide-link">Home</a>
+      <a href="#" data-slide="1" class="mob-slide-link">About</a>
+      <a href="#" data-slide="2" class="mob-slide-link">Problem</a>
+      <a href="#" data-slide="3" class="mob-slide-link">Solution</a>
+      <a href="#" data-slide="4" class="mob-slide-link">Products</a>
+      <a href="#" data-slide="5" class="mob-slide-link">Projects</a>
+      <a href="#" data-slide="6" class="mob-slide-link">Impact</a>
+    </li>
+    <li class="mob-divider"></li>
+    <li><a href="awards.html">Awards</a></li>
+    <li><a href="about-ceo.html">CEO</a></li>
+    <li><a href="community.html">Community</a></li>
+    <li><a href="#" data-slide="7">Contact</a></li>
+    <li><a href="login.html" class="mob-login"><i class="fas fa-user"></i> <span id="mobLoginText">Login</span></a></li>
+  </ul>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gallery | MAZE</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"/>
+<link rel="stylesheet" href="css/style.css"/>
+<style>
+  html,body{overflow:auto!important;height:auto;min-height:100vh}
+  body{background:#0a0c0f}
+  .gallery-masonry{columns:3 280px;gap:16px;margin-top:32px}
+  @media(max-width:768px){.gallery-masonry{columns:2 160px}}
+  @media(max-width:480px){.gallery-masonry{columns:1}}
+  .gm-item{break-inside:avoid;margin-bottom:16px;border-radius:14px;overflow:hidden;position:relative;cursor:pointer;border:1px solid rgba(255,255,255,0.06);transition:transform .3s,border-color .3s;background:rgba(255,255,255,0.02)}
+  .gm-item:hover{transform:translateY(-3px);border-color:rgba(107,255,133,0.2)}
+  .gm-item img{width:100%;display:block;transition:transform .4s}
+  .gm-item:hover img{transform:scale(1.04)}
+  .gm-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.75));padding:16px;opacity:0;transition:opacity .3s}
+  .gm-item:hover .gm-overlay{opacity:1}
+  .gm-overlay h4{font-size:0.85rem;font-weight:700;margin-bottom:2px}
+  .gm-overlay p{font-size:0.72rem;color:rgba(255,255,255,0.6)}
+  .gm-placeholder{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.2)}
+  .filter-chip{padding:8px 18px;border-radius:100px;font-size:0.78rem;font-weight:600;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);background:none;cursor:pointer;transition:.2s}
+  .filter-chip.active{background:#2d7a3a;color:#fff;border-color:#2d7a3a}
+  .upload-area-wrap{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px;margin-bottom:32px}
+  .upload-area-wrap h3{font-size:1rem;font-weight:700;margin-bottom:16px;color:rgba(255,255,255,0.7)}
+  #fileInput{display:none}
+  .gm-delete{position:absolute;top:8px;right:8px;background:rgba(239,68,68,0.9);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:0.72rem;cursor:pointer;font-weight:600;opacity:0;transition:opacity .2s;z-index:10}
+  .gm-item:hover .gm-delete{opacity:1}
+</style>
+</head>
+<body class="subpage-body">
+
+<nav class="subpage-nav">
+  <a href="index.html" class="nav-logo">
+    <img src="images/logo.png" alt="MAZE"/><span>MAZE</span>
+  </a>
+  <div style="display:flex;gap:12px;align-items:center">
+    <a href="community.html" style="font-size:0.82rem;color:rgba(255,255,255,0.5)" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">커뮤니티</a>
+    <a href="login.html" id="galleryLoginBtn" style="font-size:0.82rem;background:#2d7a3a;color:#fff;padding:7px 16px;border-radius:8px;font-weight:600">Login</a>
+  </div>
+</nav>
+
+<div class="subpage-hero" style="min-height:220px;padding-top:90px">
+  <div class="subpage-hero-content">
+    <p class="label-tag" style="margin-bottom:12px">Gallery</p>
+    <h1 style="font-size:clamp(1.8rem,4vw,3rem)">갤러리</h1>
+    <p style="color:rgba(255,255,255,0.55);font-size:0.9rem">MAZE의 제품, 프로젝트, 현장 사진</p>
+  </div>
+</div>
+
+<div class="subpage-content">
+
+  <!-- ADMIN UPLOAD (admin only) -->
+  <div id="adminUploadZone" style="display:none" class="upload-area-wrap">
+    <h3><i class="fas fa-crown" style="color:#fbbf24;margin-right:6px"></i>관리자 — 사진 업로드</h3>
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()"
+         ondragover="this.classList.add('dragover');event.preventDefault()"
+         ondragleave="this.classList.remove('dragover')"
+         ondrop="handleDrop(event)">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <p>클릭하거나 사진을 끌어다 놓으세요</p>
+      <small>JPG, PNG, GIF, WEBP 지원 · 최대 10MB</small>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" multiple onchange="handleFileSelect(this.files)"/>
+    <!-- Upload form fields -->
+    <div id="uploadPreviewArea" style="margin-top:16px;display:none">
+      <div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;align-items:flex-end">
+        <div style="flex:1;min-width:160px">
+          <label style="font-size:0.75rem;color:rgba(255,255,255,0.4);display:block;margin-bottom:4px">제목</label>
+          <input type="text" id="uploadTitle" class="form-input-dark" placeholder="사진 제목"/>
+        </div>
+        <div style="flex:1;min-width:120px">
+          <label style="font-size:0.75rem;color:rgba(255,255,255,0.4);display:block;margin-bottom:4px">카테고리</label>
+          <select id="uploadCategory" class="form-input-dark" style="cursor:pointer">
+            <option value="all">전체</option>
+            <option value="product">제품</option>
+            <option value="project">프로젝트</option>
+            <option value="collab">협업</option>
+            <option value="event">행사</option>
+          </select>
+        </div>
+      </div>
+      <div id="uploadImgPreview" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px"></div>
+      <button onclick="doUpload()" class="btn-primary"><i class="fas fa-upload"></i> 업로드</button>
+      <button onclick="cancelUpload()" class="btn-ghost" style="margin-left:8px">취소</button>
+    </div>
+    <div id="uploadMsg" style="font-size:0.82rem;margin-top:8px"></div>
+  </div>
+
+  <!-- FILTER -->
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+    <button class="filter-chip active" data-cat="all" onclick="setFilter(this,'all')">전체</button>
+    <button class="filter-chip" data-cat="product" onclick="setFilter(this,'product')">제품</button>
+    <button class="filter-chip" data-cat="project" onclick="setFilter(this,'project')">프로젝트</button>
+    <button class="filter-chip" data-cat="collab" onclick="setFilter(this,'collab')">협업</button>
+    <button class="filter-chip" data-cat="event" onclick="setFilter(this,'event')">행사</button>
+  </div>
+
+  <div class="gallery-masonry" id="galleryMasonry"></div>
+  <div id="galleryEmpty" style="display:none;text-align:center;padding:80px;color:rgba(255,255,255,0.3)">
+    <i class="fas fa-images" style="font-size:3rem;margin-bottom:16px;display:block"></i>
+    <p>해당 카테고리의 사진이 없습니다</p>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" style="display:none" class="lightbox-overlay" onclick="if(event.target===this)closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <div style="text-align:center">
+    <img id="lightboxImg" src="" alt="" style="max-width:90vw;max-height:80vh;object-fit:contain;border-radius:12px"/>
+    <p id="lightboxCaption" style="color:rgba(255,255,255,0.6);font-size:0.85rem;margin-top:12px"></p>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+/* ── DEFAULT GALLERY ── */
+const DEFAULT_GALLERY = [
+  {id:'def1',title:'Green Cycle 프로젝트 포스터',category:'project',src:'images/green-cycle-poster.jpg',createdAt:1704067200000},
+  {id:'def2',title:'Green Cycle 제품 & 현장',category:'collab',src:'images/green-cycle-product.jpg',createdAt:1704153600000},
+  {id:'def3',title:'Click to Green — 키캡 키링',category:'product',src:'images/click-to-green.jpg',createdAt:1704240000000},
+  {id:'def4',title:'원광대학교 납품 키캡 키링',category:'product',src:'images/wonrse-keycap.jpg',createdAt:1704326400000},
+];
+
+let currentFilter='all';
+let pendingFiles=[];
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded',()=>{
+  // 관리자만 접근 가능 — 비로그인 또는 일반회원이면 즉시 차단
+  if(!AUTH.isAdmin()){
+    document.body.innerHTML=`
+      <div style="min-height:100vh;background:#0a0c0f;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;padding:24px;text-align:center">
+        <div style="font-size:3rem;margin-bottom:16px">🔒</div>
+        <h2 style="color:#fff;font-size:1.4rem;font-weight:700;margin-bottom:10px">관리자 전용 페이지</h2>
+        <p style="color:rgba(255,255,255,0.45);font-size:0.9rem;margin-bottom:28px;line-height:1.7">갤러리는 관리자만 접근할 수 있습니다.<br>관리자 계정으로 로그인해주세요.</p>
+        <a href="login.html" style="background:#2d7a3a;color:#fff;padding:12px 28px;border-radius:10px;font-weight:700;font-size:0.9rem;text-decoration:none;display:inline-flex;align-items:center;gap:8px">
+          <i class="fas fa-sign-in-alt"></i> 로그인 페이지로 이동
+        </a>
+        <a href="index.html" style="margin-top:16px;font-size:0.8rem;color:rgba(255,255,255,0.3);text-decoration:none">← MAZE 홈으로</a>
+      </div>
+    `;
+    // FA 아이콘 로드 보장
+    const fa=document.createElement('link');
+    fa.rel='stylesheet';
+    fa.href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css';
+    document.head.appendChild(fa);
+    return;
+  }
+
+  // 관리자 확인 완료 → 업로드 영역 표시
+  document.getElementById('adminUploadZone').style.display='block';
+
+  const btn=document.getElementById('galleryLoginBtn');
+  if(btn){ btn.textContent='관리자'; btn.href='community.html'; }
+
+  renderGallery();
+});
+
+function getGalleryItems(){
+  const stored=JSON.parse(localStorage.getItem('maze_gallery')||'[]');
+  return [...DEFAULT_GALLERY,...stored];
+}
+
+function saveGalleryItem(item){
+  const stored=JSON.parse(localStorage.getItem('maze_gallery')||'[]');
+  stored.push(item);
+  localStorage.setItem('maze_gallery',JSON.stringify(stored));
+}
+
+function deleteGalleryItem(id){
+  const stored=JSON.parse(localStorage.getItem('maze_gallery')||'[]');
+  const filtered=stored.filter(i=>i.id!==id);
+  localStorage.setItem('maze_gallery',JSON.stringify(filtered));
+  renderGallery();
+}
+
+function setFilter(btn,cat){
+  currentFilter=cat;
+  document.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGallery();
+}
+
+function renderGallery(){
+  const items=getGalleryItems().filter(i=>currentFilter==='all'||i.category===currentFilter);
+  const masonry=document.getElementById('galleryMasonry');
+  const empty=document.getElementById('galleryEmpty');
+  if(!items.length){ masonry.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+
+  masonry.innerHTML=items.map(item=>{
+    const isCustom=!DEFAULT_GALLERY.find(d=>d.id===item.id);
+    const deleteBtn=AUTH.isAdmin()&&isCustom?`<button class="gm-delete" onclick="event.stopPropagation();if(confirm('삭제할까요?'))deleteGalleryItem('${item.id}')"><i class="fas fa-trash"></i> 삭제</button>`:'';
+    return `
+      <div class="gm-item" onclick="openLightbox('${item.src}','${escHtml(item.title)}')">
+        ${deleteBtn}
+        <img src="${item.src}" alt="${escHtml(item.title)}" loading="lazy" onerror="this.parentElement.style.display='none'"/>
+        <div class="gm-overlay">
+          <h4>${escHtml(item.title)}</h4>
+          <p>${catLabel(item.category)}</p>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function catLabel(c){ return{all:'전체',product:'제품',project:'프로젝트',collab:'협업',event:'행사'}[c]||c }
+
+/* ── UPLOAD ── */
+function handleFileSelect(files){
+  pendingFiles=Array.from(files).filter(f=>f.type.startsWith('image/'));
+  showPreview();
+}
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('dragover');
+  pendingFiles=Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/'));
+  showPreview();
+}
+function showPreview(){
+  if(!pendingFiles.length) return;
+  document.getElementById('uploadPreviewArea').style.display='block';
+  const prev=document.getElementById('uploadImgPreview');
+  prev.innerHTML='';
+  pendingFiles.forEach(f=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const img=document.createElement('img');
+      img.src=ev.target.result;
+      img.style.cssText='width:80px;height:60px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,0.1)';
+      prev.appendChild(img);
+    };
+    reader.readAsDataURL(f);
+  });
+}
+
+function doUpload(){
+  const title=document.getElementById('uploadTitle').value.trim()||'사진';
+  const category=document.getElementById('uploadCategory').value;
+  const msg=document.getElementById('uploadMsg');
+  if(!pendingFiles.length){ msg.style.color='#ff6b6b'; msg.textContent='업로드할 파일을 선택해주세요.'; return; }
+
+  let done=0;
+  pendingFiles.forEach((f,i)=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const item={
+        id:'up'+Date.now()+i,
+        title: pendingFiles.length>1?`${title} (${i+1})`:title,
+        category,
+        src:ev.target.result,
+        createdAt:Date.now()
+      };
+      saveGalleryItem(item);
+      done++;
+      if(done===pendingFiles.length){
+        msg.style.color='#6bff85';
+        msg.textContent=`✓ ${done}개 사진이 업로드되었습니다!`;
+        cancelUpload();
+        renderGallery();
+        setTimeout(()=>msg.textContent='',3000);
+      }
+    };
+    reader.readAsDataURL(f);
+  });
+}
+
+function cancelUpload(){
+  pendingFiles=[];
+  document.getElementById('uploadPreviewArea').style.display='none';
+  document.getElementById('uploadImgPreview').innerHTML='';
+  document.getElementById('uploadTitle').value='';
+  document.getElementById('fileInput').value='';
+}
+
+/* ── LIGHTBOX ── */
+function openLightbox(src,cap){
+  document.getElementById('lightboxImg').src=src;
+  document.getElementById('lightboxCaption').textContent=cap;
+  document.getElementById('lightbox').style.display='flex';
+  document.addEventListener('keydown',lbKey);
+}
+function closeLightbox(){
+  document.getElementById('lightbox').style.display='none';
+  document.removeEventListener('keydown',lbKey);
+}
+function lbKey(e){ if(e.key==='Escape') closeLightbox(); }
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+</script>
+</body>
+</html>

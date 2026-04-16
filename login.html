@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Login | MAZE</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"/>
+<link rel="stylesheet" href="css/style.css"/>
+<style>
+/* ── PAGE BASE ── */
+html,body{overflow:auto!important;height:auto;min-height:100vh}
+body{background:#0a0c0f;display:flex;flex-direction:column;min-height:100vh;font-family:'Inter','Noto Sans KR',sans-serif}
+
+/* ── BG GLOW ── */
+.login-bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(45,122,58,0.12),transparent 70%)}
+
+/* ── WRAP ── */
+.login-page{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;position:relative;z-index:1}
+
+/* ── BOX ── */
+.login-box{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:20px;
+  padding:44px 40px;
+  width:100%;max-width:440px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 24px 64px rgba(0,0,0,0.5);
+  position:relative;overflow:hidden
+}
+.login-box::before{
+  content:'';position:absolute;inset:0;border-radius:20px;
+  background:linear-gradient(135deg,rgba(45,122,58,0.06) 0%,transparent 60%);
+  pointer-events:none
+}
+
+/* ── LOGO ── */
+.login-logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:8px}
+.login-logo img{width:36px;height:36px;object-fit:contain}
+.login-logo span{font-size:1.3rem;font-weight:800;letter-spacing:4px;color:#fff}
+
+/* ── TITLE ── */
+.login-title{font-size:1.5rem;font-weight:700;color:#fff;text-align:center;margin:0 0 6px}
+.login-sub{font-size:0.82rem;color:rgba(255,255,255,0.45);text-align:center;margin-bottom:28px}
+
+/* ── TABS ── */
+.tab-bar{display:flex;gap:0;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:4px;margin-bottom:28px}
+.tab-btn{flex:1;padding:9px;border-radius:7px;font-size:0.85rem;font-weight:600;background:none;color:rgba(255,255,255,0.5);cursor:pointer;border:none;transition:.25s;font-family:inherit}
+.tab-btn.active{background:#2d7a3a;color:#fff}
+
+/* ── FORM GROUPS ── */
+.lf-group{margin-bottom:16px;position:relative}
+.lf-group label{display:block;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.55);margin-bottom:7px;letter-spacing:.5px}
+.lf-group input{
+  width:100%;box-sizing:border-box;
+  padding:12px 44px 12px 14px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:10px;color:#fff;font-size:0.9rem;
+  transition:.2s;-webkit-user-select:text;user-select:text;
+  font-family:inherit;
+  /* 드래그 복사는 허용, 드래그로 값 끌기만 방지 */
+  -webkit-user-drag:none
+}
+.lf-group input:focus{outline:none;border-color:#2d7a3a;background:rgba(45,122,58,0.08)}
+.lf-group input::placeholder{color:rgba(255,255,255,0.25)}
+
+/* eye toggle */
+.pw-toggle{position:absolute;right:14px;bottom:13px;background:none;border:none;color:rgba(255,255,255,0.35);cursor:pointer;font-size:0.9rem;padding:0;transition:.2s}
+.pw-toggle:hover{color:#6bff85}
+
+/* ── ERROR / SUCCESS ── */
+.lf-msg{font-size:0.78rem;padding:9px 12px;border-radius:8px;margin-bottom:14px;display:none}
+.lf-msg.show{display:block}
+.lf-msg.err{background:rgba(220,50,50,0.15);border:1px solid rgba(220,50,50,0.25);color:#ff8080}
+.lf-msg.ok{background:rgba(45,122,58,0.15);border:1px solid rgba(45,122,58,0.3);color:#6bff85}
+
+/* ── SUBMIT BTN ── */
+.btn-submit{
+  width:100%;padding:13px;border:none;border-radius:10px;
+  background:linear-gradient(135deg,#2d7a3a,#1a5c26);
+  color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;
+  transition:.25s;display:flex;align-items:center;justify-content:center;gap:8px;
+  font-family:inherit;letter-spacing:.3px;margin-top:4px
+}
+.btn-submit:hover{background:linear-gradient(135deg,#38a048,#2d7a3a);transform:translateY(-1px);box-shadow:0 8px 24px rgba(45,122,58,0.35)}
+.btn-submit:active{transform:translateY(0)}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* ── DIVIDER ── */
+.lf-divider{display:flex;align-items:center;gap:12px;margin:20px 0}
+.lf-divider::before,.lf-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
+.lf-divider span{font-size:0.75rem;color:rgba(255,255,255,0.3)}
+
+/* ── FOOTER LINKS ── */
+.login-footer{text-align:center;font-size:0.8rem;color:rgba(255,255,255,0.35);margin-top:18px}
+.login-footer a{color:#6bff85;text-decoration:none;font-weight:600}
+.login-footer a:hover{text-decoration:underline}
+.lf-forgot{text-align:right;margin-top:-8px;margin-bottom:16px}
+.lf-forgot a{font-size:0.77rem;color:rgba(255,255,255,0.4);text-decoration:none;transition:.2s}
+.lf-forgot a:hover{color:#6bff85}
+
+/* ── HOME LINK ── */
+.back-home{text-align:center;margin-top:22px}
+.back-home a{font-size:0.75rem;color:rgba(255,255,255,0.25);text-decoration:none;transition:.2s}
+.back-home a:hover{color:rgba(255,255,255,0.55)}
+
+/* ── TOUCH GUIDE OVERLAY ── */
+/* 드래그 진입 방지 + 터치 안내 토스트 */
+.touch-guide-toast{
+  position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:rgba(45,122,58,0.92);color:#fff;
+  padding:11px 22px;border-radius:40px;font-size:0.83rem;font-weight:600;
+  display:flex;align-items:center;gap:8px;
+  backdrop-filter:blur(10px);
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .4s;
+  opacity:0;pointer-events:none;z-index:9999
+}
+.touch-guide-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* ── PASSWORD RESET MODAL ── */
+.modal-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,0.7);
+  display:flex;align-items:center;justify-content:center;
+  z-index:10000;opacity:0;pointer-events:none;transition:opacity .3s
+}
+.modal-backdrop.open{opacity:1;pointer-events:all}
+.modal-card{
+  background:#111418;border:1px solid rgba(255,255,255,0.1);border-radius:18px;
+  padding:36px 32px;width:100%;max-width:380px;position:relative;
+  transform:scale(.94) translateY(16px);transition:transform .3s
+}
+.modal-backdrop.open .modal-card{transform:scale(1) translateY(0)}
+.modal-card h3{font-size:1.15rem;font-weight:700;color:#fff;margin:0 0 8px}
+.modal-card p{font-size:0.82rem;color:rgba(255,255,255,0.45);margin:0 0 22px;line-height:1.6}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(255,255,255,0.4);font-size:1.1rem;cursor:pointer;transition:.2s}
+.modal-close:hover{color:#fff}
+.reset-step{display:none}
+.reset-step.active{display:block}
+.reset-notice{font-size:0.8rem;color:rgba(255,255,255,0.4);margin-top:14px;text-align:center;line-height:1.7}
+
+/* ── EMAIL INPUT HINT ── */
+.email-hint{font-size:0.75rem;color:rgba(107,255,133,0.7);margin-top:5px;display:none}
+
+/* ── STRENGTH BAR ── */
+.pw-strength{height:3px;border-radius:4px;background:rgba(255,255,255,0.07);margin-top:7px;overflow:hidden}
+.pw-strength-fill{height:100%;width:0%;border-radius:4px;transition:width .3s,background .3s}
+
+@media(max-width:480px){
+  .login-box{padding:32px 22px}
+  .login-title{font-size:1.25rem}
+}
+</style>
+</head>
+<body>
+<div class="login-bg-glow"></div>
+
+<!-- Touch guide toast -->
+<div class="touch-guide-toast" id="touchToast">
+  <i class="fas fa-hand-pointer"></i>
+  <span>터치하여 입력하세요</span>
+</div>
+
+<!-- Password reset modal -->
+<div class="modal-backdrop" id="resetModal" role="dialog" aria-modal="true" aria-label="비밀번호 찾기">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeResetModal()" aria-label="닫기"><i class="fas fa-times"></i></button>
+    <h3>🔐 비밀번호 찾기</h3>
+    <p>가입 시 사용한 이메일로 임시 비밀번호를 발급해드립니다.</p>
+
+    <!-- Step 1: email input -->
+    <div class="reset-step active" id="resetStep1">
+      <div class="lf-group">
+        <label>이메일 주소</label>
+        <input type="email" id="resetEmail" placeholder="가입한 이메일 입력" autocomplete="email"
+               ondragstart="return false" ondrop="return false"/>
+      </div>
+      <div class="lf-msg" id="resetMsg"></div>
+      <button class="btn-submit" onclick="sendReset()">
+        <i class="fas fa-paper-plane"></i> 임시 비밀번호 발급
+      </button>
+      <p class="reset-notice">이메일이 기억나지 않으면 인스타그램 DM으로 문의해주세요.<br>
+        <a href="https://www.instagram.com/dydgus_.0802" target="_blank" style="color:#6bff85">@dydgus_.0802</a>
+      </p>
+    </div>
+
+    <!-- Step 2: temp password received + new password set -->
+    <div class="reset-step" id="resetStep2">
+      <div class="lf-group">
+        <label>임시 비밀번호</label>
+        <input type="text" id="resetTempPw" placeholder="이메일로 전송된 코드 입력"
+               ondragstart="return false" ondrop="return false"/>
+      </div>
+      <div class="lf-group">
+        <label>새 비밀번호</label>
+        <input type="password" id="resetNewPw" placeholder="새 비밀번호 6자 이상" id="resetNewPw"
+               ondragstart="return false" ondrop="return false"/>
+        <div class="pw-strength"><div class="pw-strength-fill" id="resetStrFill"></div></div>
+      </div>
+      <div class="lf-group">
+        <label>새 비밀번호 확인</label>
+        <input type="password" id="resetNewPw2" placeholder="비밀번호 재입력"
+               ondragstart="return false" ondrop="return false"/>
+      </div>
+      <div class="lf-msg" id="resetMsg2"></div>
+      <button class="btn-submit" onclick="confirmReset()">
+        <i class="fas fa-check"></i> 비밀번호 변경
+      </button>
+    </div>
+
+    <!-- Step 3: success -->
+    <div class="reset-step" id="resetStep3" style="text-align:center;padding:10px 0">
+      <div style="font-size:2.5rem;margin-bottom:12px">✅</div>
+      <p style="color:#6bff85;font-weight:700;font-size:1rem;margin-bottom:8px">비밀번호가 변경되었습니다!</p>
+      <p style="font-size:0.82rem;color:rgba(255,255,255,0.4)">새 비밀번호로 로그인하세요.</p>
+      <button class="btn-submit" style="margin-top:20px" onclick="closeResetModal();switchTab('login')">
+        <i class="fas fa-sign-in-alt"></i> 로그인으로 이동
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Main login page -->
+<div class="login-page">
+  <div class="login-box" id="loginBox">
+    <div class="login-logo">
+      <img src="images/logo.png" alt="MAZE logo"/>
+      <span>MAZE</span>
+    </div>
+
+    <!-- TABS -->
+    <div class="tab-bar" role="tablist">
+      <button class="tab-btn active" id="tabLogin" onclick="switchTab('login')" role="tab" aria-selected="true">로그인</button>
+      <button class="tab-btn" id="tabSignup" onclick="switchTab('signup')" role="tab" aria-selected="false">회원가입</button>
+    </div>
+
+    <!-- ════ LOGIN FORM ════ -->
+    <div id="loginForm" role="tabpanel">
+      <h2 class="login-title">로그인</h2>
+      <p class="login-sub">MAZE 계정으로 로그인하세요</p>
+      <form class="login-form" onsubmit="doLogin(event)" autocomplete="on" id="loginFormEl">
+
+        <div class="lf-group">
+          <label for="loginEmail">이메일</label>
+          <input type="email" id="loginEmail"
+                 placeholder="example@email.com"
+                 autocomplete="email"
+                 inputmode="email"
+                 ondragstart="return false"
+                 ondrop="showTouchToast(); return false"/>
+          <span class="email-hint" id="loginEmailHint"><i class="fas fa-check-circle"></i> 올바른 이메일 형식입니다</span>
+        </div>
+
+        <div class="lf-group" style="position:relative">
+          <label for="loginPw">비밀번호</label>
+          <input type="password" id="loginPw"
+                 placeholder="비밀번호 입력"
+                 autocomplete="current-password"
+                 ondragstart="return false"
+                 ondrop="showTouchToast(); return false"/>
+          <button type="button" class="pw-toggle" onclick="togglePw('loginPw',this)" tabindex="-1" aria-label="비밀번호 표시">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+
+        <div class="lf-forgot">
+          <a href="#" onclick="openResetModal(event)">비밀번호를 잊으셨나요?</a>
+        </div>
+
+        <div class="lf-msg" id="loginErr"></div>
+        <button type="submit" class="btn-submit" id="loginBtn">
+          <i class="fas fa-sign-in-alt"></i> 로그인
+        </button>
+      </form>
+      <div class="login-footer">계정이 없으신가요? <a href="#" onclick="switchTab('signup')">회원가입</a></div>
+    </div>
+
+    <!-- ════ SIGNUP FORM ════ -->
+    <div id="signupForm" style="display:none" role="tabpanel">
+      <h2 class="login-title">회원가입</h2>
+      <p class="login-sub">MAZE 커뮤니티에 참여하세요</p>
+      <form class="login-form" onsubmit="doSignup(event)" autocomplete="on" id="signupFormEl">
+
+        <div class="lf-group">
+          <label for="signupEmail">이메일 *</label>
+          <input type="email" id="signupEmail"
+                 placeholder="example@email.com"
+                 autocomplete="email"
+                 inputmode="email"
+                 ondragstart="return false"
+                 ondrop="showTouchToast(); return false"/>
+          <span class="email-hint" id="signupEmailHint"><i class="fas fa-check-circle"></i> 올바른 이메일 형식입니다</span>
+        </div>
+
+        <div class="lf-group">
+          <label for="signupNick">닉네임 *</label>
+          <input type="text" id="signupNick"
+                 placeholder="닉네임 2~12자"
+                 autocomplete="nickname"
+                 ondragstart="return false"
+                 ondrop="showTouchToast(); return false"/>
+        </div>
+
+        <div class="lf-group" style="position:relative">
+          <label for="signupPw">비밀번호 *</label>
+          <input type="password" id="signupPw"
+                 placeholder="6자 이상"
+                 autocomplete="new-password"
+                 oninput="updateStrength(this.value,'strFill')"
+                 ondragstart="return false"
+                 ondrop="showTouchToast(); return false"/>
+          <button type="button" class="pw-toggle" onclick="togglePw('signupPw',this)" tabindex="-1" aria-label="비밀번호 표시">
+            <i class="fas fa-eye"></i>
+          </button>
+          <div class="pw-strength"><div class="pw-strength-fill" id="strFill"></div></div>
+        </div>
+
+        <div class="lf-group" style="position:relative">
+          <label for="signupPw2">비밀번호 확인 *</label>
+          <input type="password" id="signupPw2"
+                 placeholder="비밀번호 재입력"
+                 autocomplete="new-password"
+                 ondragstart="return false"
+                 ondrop="showTouchToast(); return false"/>
+          <button type="button" class="pw-toggle" onclick="togglePw('signupPw2',this)" tabindex="-1" aria-label="비밀번호 표시">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+
+        <div class="lf-msg" id="signupErr"></div>
+        <button type="submit" class="btn-submit" id="signupBtn">
+          <i class="fas fa-user-plus"></i> 회원가입
+        </button>
+      </form>
+      <div class="login-footer">이미 계정이 있으신가요? <a href="#" onclick="switchTab('login')">로그인</a></div>
+    </div>
+
+    <div class="back-home"><a href="index.html"><i class="fas fa-arrow-left"></i> MAZE 홈으로</a></div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+/* ── CONSTANTS ── */
+const ADMIN_EMAIL = 'yhkwon2004@gmail.com'; // admin email
+const USERS_KEY = 'maze_users_v2';        // email-keyed store
+
+/* ── TAB SWITCH ── */
+function switchTab(tab){
+  const isLogin = tab === 'login';
+  document.getElementById('loginForm').style.display  = isLogin ? 'block' : 'none';
+  document.getElementById('signupForm').style.display = isLogin ? 'none'  : 'block';
+  document.getElementById('tabLogin').classList.toggle('active', isLogin);
+  document.getElementById('tabSignup').classList.toggle('active', !isLogin);
+  clearMsgs();
+}
+
+function clearMsgs(){
+  ['loginErr','signupErr'].forEach(id=>{ const el=document.getElementById(id); if(el){el.className='lf-msg';el.textContent=''} });
+}
+
+/* ── SHOW MSG ── */
+function showMsg(id,text,type='err'){
+  const el=document.getElementById(id);
+  el.className=`lf-msg show ${type}`;
+  el.textContent=text;
+}
+
+/* ── TOGGLE PASSWORD VISIBILITY ── */
+function togglePw(inputId, btn){
+  const inp = document.getElementById(inputId);
+  const icon = btn.querySelector('i');
+  if(inp.type === 'password'){
+    inp.type = 'text';
+    icon.className = 'fas fa-eye-slash';
+  } else {
+    inp.type = 'password';
+    icon.className = 'fas fa-eye';
+  }
+}
+
+/* ── PASSWORD STRENGTH ── */
+function updateStrength(val, fillId){
+  const fill = document.getElementById(fillId);
+  if(!fill) return;
+  let score = 0;
+  if(val.length >= 6)  score++;
+  if(val.length >= 10) score++;
+  if(/[A-Z]/.test(val) || /[!@#$%^&*]/.test(val)) score++;
+  if(/[0-9]/.test(val)) score++;
+  const w  = ['0%','25%','50%','75%','100%'][score];
+  const bg = ['#555','#e05c5c','#f0a830','#6bff85','#00e676'][score];
+  fill.style.width = w;
+  fill.style.background = bg;
+}
+
+/* ── EMAIL VALIDATION HINT ── */
+function setupEmailHint(inputId, hintId){
+  const inp  = document.getElementById(inputId);
+  const hint = document.getElementById(hintId);
+  if(!inp || !hint) return;
+  inp.addEventListener('input', () => {
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value.trim());
+    hint.style.display = (inp.value.length > 3 && valid) ? 'block' : 'none';
+  });
+}
+setupEmailHint('loginEmail','loginEmailHint');
+setupEmailHint('signupEmail','signupEmailHint');
+
+/* ── DRAG PREVENTION → TOUCH TOAST ── */
+function showTouchToast(){
+  const toast = document.getElementById('touchToast');
+  toast.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=> toast.classList.remove('show'), 2800);
+}
+
+// Prevent drag-to-fill on the whole page
+document.addEventListener('dragover', e => e.preventDefault());
+document.addEventListener('drop', e => { e.preventDefault(); showTouchToast(); });
+
+// Show touch guide on first mobile visit
+if('ontouchstart' in window){
+  setTimeout(showTouchToast, 600);
+}
+
+/* ── USERS STORE (email-keyed) ── */
+function getUsers(){ try{ return JSON.parse(localStorage.getItem(USERS_KEY)||'{}') }catch{ return {} } }
+function saveUsers(obj){ localStorage.setItem(USERS_KEY, JSON.stringify(obj)) }
+
+/* ── LOGIN ── */
+function doLogin(e){
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const pw    = document.getElementById('loginPw').value;
+  if(!email || !pw){ showMsg('loginErr','이메일과 비밀번호를 입력해주세요.'); return }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showMsg('loginErr','올바른 이메일 주소를 입력해주세요.'); return }
+
+  // Admin login
+  if(email === ADMIN_EMAIL && pw === AUTH.ADMIN_PW){
+    AUTH.set({id: ADMIN_EMAIL, email: ADMIN_EMAIL, nick:'관리자', isAdmin:true});
+    window.location.href = 'community.html';
+    return;
+  }
+
+  const users = getUsers();
+  const user  = users[email];
+  if(user && user.pw === pw){
+    AUTH.set({id: email, email, nick: user.nick, isAdmin: false});
+    window.location.href = 'community.html';
+  } else {
+    showMsg('loginErr','이메일 또는 비밀번호가 올바르지 않습니다.');
+    document.getElementById('loginPw').value = '';
+    document.getElementById('loginPw').focus();
+  }
+}
+
+/* ── SIGNUP ── */
+function doSignup(e){
+  e.preventDefault();
+  const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+  const nick  = document.getElementById('signupNick').value.trim();
+  const pw    = document.getElementById('signupPw').value;
+  const pw2   = document.getElementById('signupPw2').value;
+
+  if(!email||!nick||!pw||!pw2){ showMsg('signupErr','모든 항목을 입력해주세요.'); return }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showMsg('signupErr','올바른 이메일 주소를 입력해주세요.'); return }
+  if(nick.length<2||nick.length>12){ showMsg('signupErr','닉네임은 2~12자입니다.'); return }
+  if(pw.length<6){ showMsg('signupErr','비밀번호는 6자 이상입니다.'); return }
+  if(pw !== pw2){ showMsg('signupErr','비밀번호가 일치하지 않습니다.'); return }
+  // 관리자 이메일로는 회원가입 불가
+  if(email === ADMIN_EMAIL){ showMsg('signupErr','사용할 수 없는 이메일입니다.'); return }
+
+  const users = getUsers();
+  if(users[email]){ showMsg('signupErr','이미 사용 중인 이메일입니다.'); return }
+
+  users[email] = { nick, pw, email, createdAt: Date.now() };
+  saveUsers(users);
+  AUTH.set({id: email, email, nick, isAdmin: false});
+  window.location.href = 'community.html';
+}
+
+/* ══════════════════════════
+   PASSWORD RESET FLOW
+══════════════════════════ */
+let _resetEmail = '';
+let _tempPw     = '';
+
+function openResetModal(e){
+  e.preventDefault();
+  document.getElementById('resetModal').classList.add('open');
+  showResetStep(1);
+  document.getElementById('resetEmail').value = document.getElementById('loginEmail').value || '';
+  document.getElementById('resetEmail').focus();
+}
+
+function closeResetModal(){
+  document.getElementById('resetModal').classList.remove('open');
+  showResetStep(1);
+  clearResetMsgs();
+}
+
+function showResetStep(n){
+  [1,2,3].forEach(i=>{
+    const el = document.getElementById(`resetStep${i}`);
+    el.classList.toggle('active', i===n);
+  });
+}
+
+function clearResetMsgs(){
+  ['resetMsg','resetMsg2'].forEach(id=>{ const el=document.getElementById(id); if(el){el.className='lf-msg';el.textContent=''} });
+}
+
+function showResetMsg(id,text,type='err'){
+  const el=document.getElementById(id);
+  el.className=`lf-msg show ${type}`;
+  el.textContent=text;
+}
+
+/* Step 1: verify email & generate temp password */
+function sendReset(){
+  const email = document.getElementById('resetEmail').value.trim().toLowerCase();
+  if(!email){ showResetMsg('resetMsg','이메일을 입력해주세요.'); return }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showResetMsg('resetMsg','올바른 이메일 주소를 입력해주세요.'); return }
+
+  const users = getUsers();
+  const isAdmin = (email === ADMIN_EMAIL);
+
+  if(!isAdmin && !users[email]){
+    showResetMsg('resetMsg','가입된 이메일이 아닙니다. 인스타 DM으로 문의해 주세요.');
+    return;
+  }
+
+  // Generate 6-digit temp password
+  _tempPw    = String(Math.floor(100000 + Math.random() * 900000));
+  _resetEmail = email;
+
+  // Store temp pw temporarily
+  const store = JSON.parse(localStorage.getItem('maze_reset')||'{}');
+  store[email] = { tempPw: _tempPw, expires: Date.now() + 15*60*1000 };
+  localStorage.setItem('maze_reset', JSON.stringify(store));
+
+  // In a real app: send email. Here we show it directly (demo mode)
+  showResetMsg('resetMsg',`임시 비밀번호가 발급되었습니다: ${_tempPw} (15분 유효 / 데모 표시)`,'ok');
+  setTimeout(()=> showResetStep(2), 1800);
+  document.getElementById('resetNewPw').addEventListener('input', function(){
+    updateStrength(this.value,'resetStrFill');
+  });
+}
+
+/* Step 2: verify temp pw + set new pw */
+function confirmReset(){
+  const tempInput = document.getElementById('resetTempPw').value.trim();
+  const newPw     = document.getElementById('resetNewPw').value;
+  const newPw2    = document.getElementById('resetNewPw2').value;
+
+  const store = JSON.parse(localStorage.getItem('maze_reset')||'{}');
+  const entry = store[_resetEmail];
+
+  if(!entry || Date.now() > entry.expires){ showResetMsg('resetMsg2','임시 비밀번호가 만료되었습니다. 다시 시도해주세요.'); return }
+  if(tempInput !== entry.tempPw){ showResetMsg('resetMsg2','임시 비밀번호가 올바르지 않습니다.'); return }
+  if(newPw.length < 6){ showResetMsg('resetMsg2','비밀번호는 6자 이상입니다.'); return }
+  if(newPw !== newPw2){ showResetMsg('resetMsg2','비밀번호가 일치하지 않습니다.'); return }
+
+  // Update password
+  const isAdmin = (_resetEmail === ADMIN_EMAIL);
+  if(!isAdmin){
+    const users = getUsers();
+    if(users[_resetEmail]){ users[_resetEmail].pw = newPw; saveUsers(users); }
+  }
+  // Admin pw change is session-only in this demo (cannot persist hardcoded)
+
+  // Cleanup
+  delete store[_resetEmail];
+  localStorage.setItem('maze_reset', JSON.stringify(store));
+  _tempPw = ''; _resetEmail = '';
+
+  showResetStep(3);
+}
+
+// Close modal on backdrop click
+document.getElementById('resetModal').addEventListener('click', function(e){
+  if(e.target === this) closeResetModal();
+});
+
+/* ── REDIRECT IF ALREADY LOGGED IN ── */
+if(AUTH && AUTH.isLoggedIn()) window.location.href = 'community.html';
+</script>
+</body>
+</html>
