@@ -6,7 +6,20 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;height:100%;overflow:hidden}
 body{font-family:'Inter','Noto Sans KR',sans-serif;background:#0a0c0f;color:#fff;-webkit-font-smoothing:antialiased}
-img{max-width:100%;height:auto;display:block}
+img{
+  max-width:100%;height:auto;display:block;
+  /* 이미지 로딩 최적화 */
+  content-visibility:auto;
+  /* 로딩 전 배경 placeholder */
+  background:rgba(255,255,255,0.04);
+}
+/* 이미지 로드 완료 시 부드럽게 페이드인 */
+img{opacity:0;transition:opacity .35s ease}
+img.loaded,img[loading="eager"]{opacity:1}
+/* JS 없이도 대응: 브라우저가 이미지 완료하면 */
+img:-moz-loading{opacity:0}
+/* Fallback: 로드 완료된 이미지 */
+img[complete]{opacity:1}
 a{text-decoration:none;color:inherit}
 ul{list-style:none}
 button{cursor:pointer;font-family:inherit;border:none;background:none}
@@ -534,56 +547,140 @@ input,select,textarea{font-family:inherit}
 /* ============================================================
    SLIDE 4 — PRODUCTS
    ============================================================ */
+/* ── PRODUCTS LAYOUT ── */
 .products-layout{
-  display:flex;flex-direction:column;gap:40px;
+  display:flex;flex-direction:column;
+  gap:clamp(16px,2vh,32px);
+  width:100%;height:100%;
+  justify-content:center;
 }
-.prod-header{text-align:center}
-.prod-header h2{font-size:clamp(1.8rem,3vw,2.8rem);font-weight:800;letter-spacing:-0.03em}
+.prod-header{text-align:center;flex-shrink:0}
+.prod-header h2{font-size:clamp(1.4rem,3vw,2.8rem);font-weight:800;letter-spacing:-0.03em}
 
 .prod-showcase{
-  display:grid;grid-template-columns:1.3fr 1fr;gap:28px;align-items:start;
+  display:grid;
+  grid-template-columns:1.3fr 1fr;
+  gap:clamp(14px,2vw,28px);
+  align-items:start;
+  min-height:0; /* grid overflow 방지 */
 }
 .prod-main{
   background:rgba(255,255,255,0.03);border:1px solid var(--border);
   border-radius:20px;overflow:hidden;
+  min-height:0;
 }
-.prod-img-wrap img{width:100%;height:280px;object-fit:cover}
-.prod-info{padding:28px}
+/* 이미지: 고정 높이 대신 aspect-ratio로 짤림 방지 */
+.prod-img-wrap{
+  width:100%;overflow:hidden;
+  aspect-ratio:16/9;
+  background:rgba(255,255,255,0.04); /* 로딩 전 placeholder */
+}
+.prod-img-wrap img{
+  width:100%;height:100%;
+  object-fit:cover;
+  /* 이미지 렌더링 최적화 */
+  image-rendering:auto;
+  will-change:transform;
+}
+.prod-info{padding:clamp(14px,2vw,28px)}
 .prod-badge{
   display:inline-block;
   font-size:0.65rem;font-weight:700;letter-spacing:0.15em;
   background:var(--g1);color:#fff;
-  padding:4px 12px;border-radius:100px;margin-bottom:12px;
+  padding:4px 12px;border-radius:100px;margin-bottom:10px;
 }
-.prod-info h3{font-size:1.1rem;font-weight:700;margin-bottom:10px}
-.prod-info p{font-size:0.85rem;color:var(--text-dim);line-height:1.7;margin-bottom:16px}
-.prod-specs{display:flex;flex-direction:column;gap:6px}
-.prod-specs span{font-size:0.78rem;color:var(--text-mid);display:flex;align-items:center;gap:8px}
-.prod-specs i{color:var(--gn);font-size:0.72rem}
+.prod-info h3{font-size:clamp(0.9rem,1.5vw,1.1rem);font-weight:700;margin-bottom:8px}
+.prod-info p{font-size:clamp(0.78rem,1.2vw,0.85rem);color:var(--text-dim);line-height:1.7;margin-bottom:12px}
+.prod-specs{display:flex;flex-direction:column;gap:5px}
+.prod-specs span{font-size:0.75rem;color:var(--text-mid);display:flex;align-items:center;gap:8px}
+.prod-specs i{color:var(--gn);font-size:0.7rem}
 
-.prod-sub-grid{display:flex;flex-direction:column;gap:20px}
+.prod-sub-grid{display:flex;flex-direction:column;gap:clamp(10px,1.5vh,20px);min-height:0}
 .prod-sub{
   background:rgba(255,255,255,0.03);border:1px solid var(--border);
   border-radius:16px;overflow:hidden;display:flex;
   transition:transform .3s,border-color .3s;
+  min-height:0;
 }
 .prod-sub:hover{transform:translateY(-3px);border-color:rgba(107,255,133,0.2)}
-.prod-sub img{width:100px;height:90px;object-fit:cover;flex-shrink:0}
-.prod-sub.coming{align-items:center;padding:20px}
-.coming-icon{
-  width:60px;height:60px;background:rgba(255,255,255,0.04);
-  border-radius:12px;display:flex;align-items:center;justify-content:center;
-  font-size:1.4rem;color:rgba(255,255,255,0.3);flex-shrink:0;margin-right:16px;
+/* 서브 이미지 placeholder */
+.prod-sub-imgwrap{
+  width:100px;height:90px;flex-shrink:0;
+  background:rgba(255,255,255,0.04);
+  overflow:hidden;
 }
-.ps-info{padding:14px 16px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.prod-sub-imgwrap img{
+  width:100%;height:100%;object-fit:cover;
+  display:block;
+}
+.prod-sub.coming{align-items:center;padding:16px}
+.coming-icon{
+  width:52px;height:52px;background:rgba(255,255,255,0.04);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;color:rgba(255,255,255,0.3);flex-shrink:0;margin-right:14px;
+}
+.ps-info{padding:12px 14px;display:flex;flex-direction:column;justify-content:center;gap:4px}
 .ps-tag{
-  font-size:0.65rem;font-weight:700;letter-spacing:0.1em;
+  font-size:0.63rem;font-weight:700;letter-spacing:0.1em;
   background:rgba(45,122,58,0.15);color:var(--gn);
-  padding:3px 8px;border-radius:100px;display:inline-block;width:fit-content;
+  padding:2px 8px;border-radius:100px;display:inline-block;width:fit-content;
 }
 .ps-tag.ps-dev{background:rgba(251,191,36,0.1);color:#fbbf24}
-.ps-info h4{font-size:0.88rem;font-weight:700}
-.ps-info p{font-size:0.75rem;color:var(--text-dim)}
+.ps-info h4{font-size:0.85rem;font-weight:700}
+.ps-info p{font-size:0.73rem;color:var(--text-dim)}
+
+/* ── PRODUCTS 모바일 전용 ── */
+@media(max-width:768px){
+  .products-layout{
+    gap:20px;
+    padding:0 4px;
+    justify-content:flex-start;
+    overflow-y:auto; /* 내용이 길면 스크롤 */
+  }
+  .prod-showcase{
+    grid-template-columns:1fr; /* 1열로 */
+    gap:16px;
+  }
+  .prod-img-wrap{
+    aspect-ratio:4/3; /* 모바일에서 좀 더 크게 */
+  }
+  .prod-info{padding:16px}
+  .prod-info h3{font-size:1rem}
+  .prod-sub-grid{
+    flex-direction:row;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .prod-sub{
+    flex:1;
+    min-width:calc(50% - 6px); /* 2열 */
+    flex-direction:column; /* 이미지 위, 텍스트 아래 */
+  }
+  .prod-sub-imgwrap{
+    width:100%;
+    height:110px;
+  }
+  .prod-sub.coming{
+    flex-direction:row;
+    min-width:100%;
+    padding:14px;
+  }
+  .ps-info{padding:10px 12px}
+}
+
+@media(max-width:480px){
+  .prod-sub{
+    min-width:100%; /* 480 이하는 1열 */
+    flex-direction:row;
+  }
+  .prod-sub-imgwrap{
+    width:90px;
+    height:80px;
+    flex-shrink:0;
+  }
+  .prod-info p{display:none} /* 공간 부족 시 설명 숨김 */
+  .prod-specs{display:none}
+}
 
 /* ============================================================
    SLIDE 5 — PROJECTS
@@ -783,7 +880,7 @@ input,select,textarea{font-family:inherit}
   .problem-cards{grid-template-columns:repeat(2,1fr)}
   .impact-grid{grid-template-columns:repeat(2,1fr)}
   .impact-card.large,.impact-card.wide{grid-column:span 2}
-  .prod-showcase{grid-template-columns:1fr}
+  /* prod 관련은 위 Products 전용 @media에서 관리 */
 }
 
 @media(max-width:768px){
@@ -802,9 +899,7 @@ input,select,textarea{font-family:inherit}
   .impact-grid{grid-template-columns:1fr 1fr}
   .impact-card.large{grid-column:span 2}
   .impact-card.wide{grid-column:span 2}
-  .prod-showcase{grid-template-columns:1fr}
-  .prod-sub-grid{flex-direction:row;flex-wrap:wrap}
-  .prod-sub{flex:1;min-width:140px}
+  /* prod 관련은 위 Products 전용 @media에서 관리 */
   .contact-layout{grid-template-columns:1fr}
   .sol-flow{gap:6px}
 
