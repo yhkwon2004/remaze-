@@ -344,6 +344,41 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.addEventListener('drop',     e=>{ e.preventDefault(); showMainTouchToast(); });
 });
 
+/* ── IMAGE LAZY LOAD FADE-IN ── */
+function initImgFadeIn(){
+  // 이미 로드된 이미지 즉시 표시
+  document.querySelectorAll('img').forEach(img=>{
+    if(img.complete && img.naturalWidth>0){
+      img.classList.add('loaded');
+    } else {
+      img.addEventListener('load', ()=>img.classList.add('loaded'), {once:true});
+      img.addEventListener('error', ()=>img.classList.add('loaded'), {once:true}); // 오류도 표시
+    }
+  });
+  // 동적으로 추가되는 이미지도 처리 (MutationObserver)
+  const obs = new MutationObserver(mutations=>{
+    mutations.forEach(m=>{
+      m.addedNodes.forEach(node=>{
+        if(node.tagName==='IMG') attachFade(node);
+        else if(node.querySelectorAll) node.querySelectorAll('img').forEach(attachFade);
+      });
+    });
+  });
+  obs.observe(document.body, {childList:true, subtree:true});
+}
+function attachFade(img){
+  if(img.complete && img.naturalWidth>0){ img.classList.add('loaded'); return; }
+  img.addEventListener('load', ()=>img.classList.add('loaded'), {once:true});
+  img.addEventListener('error', ()=>img.classList.add('loaded'), {once:true});
+}
+
 /* ── GLOBAL EXPORTS ── */
 window.goSlide=goSlide;
 window.AUTH=AUTH;
+
+// 이미지 페이드인 초기화 (DOMContentLoaded 이후)
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', initImgFadeIn);
+} else {
+  initImgFadeIn();
+}
